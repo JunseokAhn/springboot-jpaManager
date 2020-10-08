@@ -31,4 +31,17 @@ public class Member {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
+    public Member createMember(Long id, String name, int salary, String rank,
+                               Address address, MemberStatus status, Team team) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+        this.rank = rank;
+        this.address = address;
+        this.status = status;
+        this.team = team;
+        team.addMember(this);
+
+        return this;
+    }
 }

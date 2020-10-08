@@ -1,6 +1,8 @@
 package springboot.jpaManager.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
     @GeneratedValue
@@ -19,6 +22,18 @@ public class Company {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company")
     private List<Team> teamList = new ArrayList<>();
+
+    public Company createCompany(Long id, String name, Address address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+
+        return this;
+    }
+
+    public void addTeam(Team team) {
+        this.teamList.add(team);
+    }
 }
