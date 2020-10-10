@@ -15,4 +15,8 @@ public class Service extends Member {
 
     @Enumerated(EnumType.STRING)
     private WorkType type;
+
+    public void changeType(WorkType type) {
+        this.type = type;
+    }
 }

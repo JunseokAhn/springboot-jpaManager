@@ -44,4 +44,21 @@ public class Member {
 
         return this;
     }
+
+    public void changeTeam(Member member, Team team) {
+        this.team.deleteMember(member);
+        this.team = team;
+    }
+
+    public void changeStatus(MemberStatus status) {
+        this.status = status;
+    }
+
+    public void changeSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public void changeRank(String rank) {
+        this.rank = rank;
+    }
 }

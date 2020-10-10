@@ -36,4 +36,9 @@ public class Company {
     public void addTeam(Team team) {
         this.teamList.add(team);
     }
+
+    public void deleteTeam(Team team){
+        team.changeTeamMember();
+        this.teamList.remove(team);
+    }
 }

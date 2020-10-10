@@ -24,7 +24,7 @@ public class Team {
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
     private List<Member> memberList = new ArrayList<>();
 
     public Team createTeam(Long id, String name, String task, Company company) {
@@ -38,6 +38,18 @@ public class Team {
     }
 
     public void addMember(Member member) {
+        member.changeTeam(member, this);
         this.memberList.add(member);
+    }
+
+    public void deleteMember(Member member) {
+        this.memberList.remove(member);
+        member.changeStatus(MemberStatus.QUIT);
+    }
+
+    public void changeTeamMember() {
+        for (Member member : memberList) {
+            member.changeStatus(MemberStatus.WAIT);
+        }
     }
 }
