@@ -27,38 +27,40 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    public Member createMember(Long id, String name, int salary, String rank,
-                               Address address, MemberStatus status, Team team) {
-        this.id = id;
-        this.name = name;
-        this.salary = salary;
-        this.rank = rank;
-        this.address = address;
-        this.status = status;
-        this.team = team;
-        team.addMember(this);
+    public static final Member createMember(Long id, String name, int salary, String rank,
+                                            Address address, MemberStatus status, Team team) {
+        Member member = new Member();
+        member.id = id;
+        member.name = name;
+        member.salary = salary;
+        member.rank = rank;
+        member.address = address;
+        member.status = status;
+        member.team = team;
+        team.addMember(member);
 
-        return this;
-    }
-
-    public void changeTeam(Member member, Team team) {
-        this.team.deleteMember(member);
-        this.team = team;
+        return member;
     }
 
     public void changeStatus(MemberStatus status) {
         this.status = status;
     }
 
-    public void changeSalary(int salary) {
-        this.salary = salary;
+    public void updateMember(Member member) {
+        this.name = member.name;
+        this.salary = member.salary;
+        this.rank = member.rank;
+        this.address = member.address;
+        this.status = member.status;
     }
 
-    public void changeRank(String rank) {
-        this.rank = rank;
+    public void changeTeam(Member member, Team team) {
+        member.team.removeMember(member);
+        member.team = team;
+        member.team.addMember(member);
     }
 }

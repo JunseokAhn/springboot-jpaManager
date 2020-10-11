@@ -18,6 +18,14 @@ public class MemberRepository {
         return member.getId();
     }
 
+    public void update(Member origin, Member member) {
+        origin.updateMember(member);
+    }
+
+    public void delete(Member member) {
+        em.remove(member);
+    }
+
     public Member findOne(Long memberId) {
         return em.find(Member.class, memberId);
     }
@@ -30,4 +38,6 @@ public class MemberRepository {
         return em.createQuery("select m from Member m where m.name =:name", Member.class)
                 .setParameter("name", memberName).getResultList();
     }
+
+
 }
