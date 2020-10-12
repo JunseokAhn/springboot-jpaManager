@@ -19,6 +19,14 @@ public class TeamRepository {
         return team.getId();
     }
 
+    public void update(Team origin, Team team) {
+        origin.updateTeam(origin, team);
+    }
+
+    public void delete(Team team) {
+        em.remove(team);
+    }
+
     public Team findOne(Long teamId) {
         return em.find(Team.class, teamId);
     }
@@ -31,4 +39,9 @@ public class TeamRepository {
         return em.createQuery("select t from Team t where t.name =:name", Team.class)
                 .setParameter("name", teamName).getResultList();
     }
+
+    public void addMember(Team team, Member member) {
+        team.addMember(member);
+    }
+
 }

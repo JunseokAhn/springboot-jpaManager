@@ -27,14 +27,16 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
     private List<Member> memberList = new ArrayList<>();
 
-    public Team createTeam(Long id, String name, String task, Company company) {
-        this.id = id;
-        this.name = name;
-        this.task = task;
-        this.company = company;
-        company.addTeam(this);
+    public static final Team createTeam(Long id, String name, String task, Company company) {
+        Team team = new Team();
 
-        return this;
+        team.id = id;
+        team.name = name;
+        team.task = task;
+        team.company = company;
+        company.addTeam(team);
+
+        return team;
     }
 
     public void addMember(Member member) {
@@ -42,14 +44,22 @@ public class Team {
         this.memberList.add(member);
     }
 
-    public void deleteMember(Member member) {
-        this.memberList.remove(member);
-        member.changeStatus(MemberStatus.QUIT);
+    public void removeMember(Member member) {
+        memberList.remove(member);
     }
 
     public void changeTeamMember() {
         for (Member member : memberList) {
             member.changeStatus(MemberStatus.WAIT);
         }
+    }
+
+    public void updateTeam(Team origin, Team team) {
+        origin.id = team.id;
+        origin.name = team.name;
+        origin.task = team.task;
+        origin.company.deleteTeam(origin);
+        origin.company = team.company;
+        origin.company.addTeam(origin);
     }
 }

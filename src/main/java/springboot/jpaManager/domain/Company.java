@@ -38,7 +38,8 @@ public class Company {
     }
 
     public void deleteTeam(Team team){
-        team.changeTeamMember();
+        //팀 해체시 사용
+//        team.changeTeamMember();
         this.teamList.remove(team);
     }
 }
