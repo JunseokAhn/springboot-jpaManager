@@ -25,14 +25,13 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private List<Team> teamList = new ArrayList<>();
 
-    public Company createCompany(Long id, String name, Address address) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-
-        return this;
+    public static Company createCompany(Long id, String name, Address address) {
+        Company company = new Company();
+        company.id = id;
+        company.name = name;
+        company.address = address;
+        return company;
     }
-
     public void addTeam(Team team) {
         this.teamList.add(team);
     }
@@ -41,5 +40,10 @@ public class Company {
         //팀 해체시 사용
 //        team.changeTeamMember();
         this.teamList.remove(team);
+    }
+
+    public void update(String name, Address address) {
+        this.name = name;
+        this.address = address;
     }
 }
