@@ -19,10 +19,6 @@ public class TeamRepository {
         return team.getId();
     }
 
-    public void update(Team origin, Team team) {
-        origin.updateTeam(origin, team);
-    }
-
     public void delete(Team team) {
         em.remove(team);
     }
@@ -40,8 +36,5 @@ public class TeamRepository {
                 .setParameter("name", teamName).getResultList();
     }
 
-    public void addMember(Team team, Member member) {
-        team.addMember(member);
-    }
 
 }

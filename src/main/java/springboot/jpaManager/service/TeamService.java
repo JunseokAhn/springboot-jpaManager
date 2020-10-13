@@ -25,14 +25,16 @@ public class TeamService {
         return teamRepository.save(team);
     }
 
+    @Transactional
     public void updateTeam(Long teamId, Team team) {
         Team origin = teamRepository.findOne(teamId);
-        teamRepository.update(origin, team);
+        origin.updateTeam(team);
     }
 
     @Transactional
     public void deleteTeam(Long teamId) {
         Team team = teamRepository.findOne(teamId);
+        team.changeTeamMemberWait();
         teamRepository.delete(team);
     }
 
@@ -40,7 +42,7 @@ public class TeamService {
     public void addMember(Long teamId, Long memberId) {
         Member member = memberRepository.findOne(memberId);
         Team team = teamRepository.findOne(teamId);
-        teamRepository.addMember(team, member);
+        team.addMember(member);
     }
 
     public Team findOne(Long id) {

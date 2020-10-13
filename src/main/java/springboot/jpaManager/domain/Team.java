@@ -48,18 +48,18 @@ public class Team {
         memberList.remove(member);
     }
 
-    public void changeTeamMember() {
+    public void changeTeamMemberWait() {
         for (Member member : memberList) {
             member.changeStatus(MemberStatus.WAIT);
         }
     }
 
-    public void updateTeam(Team origin, Team team) {
-        origin.id = team.id;
-        origin.name = team.name;
-        origin.task = team.task;
-        origin.company.deleteTeam(origin);
-        origin.company = team.company;
-        origin.company.addTeam(origin);
+    public void updateTeam(Team team) {
+        this.id = team.id;
+        this.name = team.name;
+        this.task = team.task;
+        this.company.deleteTeam(this);
+        this.company = team.company;
+        this.company.addTeam(this);
     }
 }
