@@ -18,7 +18,7 @@ public class CompanyService {
 
     @Transactional
     public Long saveCompany(Long id, String name, Address address) {
-        Company company = Company.createCompany(id, name, address);
+        Company company = Company.createCompany(name, address);
         return companyRepository.save(company);
     }
 

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Team {
 
+    @Id
     @GeneratedValue
     @Column(name = "TEAM_ID")
     private Long id;
@@ -27,10 +28,9 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
     private List<Member> memberList = new ArrayList<>();
 
-    public static final Team createTeam(Long id, String name, String task, Company company) {
+    public static final Team createTeam(String name, String task, Company company) {
         Team team = new Team();
 
-        team.id = id;
         team.name = name;
         team.task = task;
         team.company = company;
@@ -40,7 +40,7 @@ public class Team {
     }
 
     public void addMember(Member member) {
-        member.changeTeam(member, this);
+        member.changeTeam(this);
         this.memberList.add(member);
     }
 

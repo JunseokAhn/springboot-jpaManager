@@ -21,7 +21,7 @@ public class TeamService {
 
     @Transactional
     public Long saveTeam(Long teamId, String name, String task, Company company) {
-        Team team = Team.createTeam(teamId, name, task, company);
+        Team team = Team.createTeam(name, task, company);
         return teamRepository.save(team);
     }
 

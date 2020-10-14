@@ -13,6 +13,7 @@ import javax.persistence.*;
 @DiscriminatorColumn
 public class Member {
 
+    @Id
     @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
@@ -31,10 +32,9 @@ public class Member {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    public static final Member createMember(Long id, String name, int salary, String rank,
+    public static final Member createMember(String name, int salary, String rank,
                                             Address address, MemberStatus status, Team team) {
         Member member = new Member();
-        member.id = id;
         member.name = name;
         member.salary = salary;
         member.rank = rank;
@@ -58,9 +58,8 @@ public class Member {
         this.status = member.status;
     }
 
-    public void changeTeam(Member member, Team team) {
-        member.team.removeMember(member);
-        member.team = team;
-        member.team.addMember(member);
+    public void changeTeam(Team team) {
+        team.removeMember(this);
+        this.team = team;
     }
 }

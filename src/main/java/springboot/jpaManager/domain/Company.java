@@ -14,6 +14,7 @@ import java.util.ArrayList;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
+    @Id
     @GeneratedValue
     @Column(name = "COMPANY_ID")
     private Long id;
@@ -25,9 +26,8 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private List<Team> teamList = new ArrayList<>();
 
-    public static Company createCompany(Long id, String name, Address address) {
+    public static Company createCompany(String name, Address address) {
         Company company = new Company();
-        company.id = id;
         company.name = name;
         company.address = address;
         return company;

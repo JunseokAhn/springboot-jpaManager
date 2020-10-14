@@ -19,10 +19,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveMember(Long id, String name, int salary, String rank,
-                           Address address, MemberStatus status, Team team) {
+    public Long saveMember(Member member) {
 
-        Member member = Member.createMember(id, name, salary, rank, address, status, team);
         return memberRepository.save(member);
     }
 
@@ -36,6 +34,10 @@ public class MemberService {
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findOne(memberId);
         memberRepository.delete(member);
+    }
+
+    public Member findOne(Long memberId) {
+        return memberRepository.findOne(memberId);
     }
 
     public List<Member> findByName(String name) {
