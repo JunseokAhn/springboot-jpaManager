@@ -18,10 +18,6 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public void update(Member origin, Member member) {
-        origin.updateMember(member);
-    }
-
     public void delete(Member member) {
         em.remove(member);
     }
@@ -40,4 +36,7 @@ public class MemberRepository {
     }
 
 
+    public void flush() {
+        em.flush();
+    }
 }

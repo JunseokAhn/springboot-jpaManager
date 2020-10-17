@@ -27,7 +27,7 @@ public class MemberService {
     @Transactional
     public void updateMember(Long memberId, Member member) {
         Member origin = memberRepository.findOne(memberId);
-        memberRepository.update(origin, member);
+        origin.updateMember(member);
     }
 
     @Transactional
@@ -48,4 +48,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+    public void flush() {
+        memberRepository.flush();
+    }
 }
