@@ -37,4 +37,7 @@ public class TeamRepository {
     }
 
 
+    public void flush() {
+        em.flush();
+    }
 }

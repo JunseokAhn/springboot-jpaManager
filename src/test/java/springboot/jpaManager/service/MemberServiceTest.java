@@ -20,8 +20,6 @@ public class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
-    @Autowired
-    TeamService teamService;
 
     @Test
     public void saveMember() throws Exception {
@@ -43,15 +41,15 @@ public class MemberServiceTest {
         //given
         Member origin = createMember();
         Long memberId = memberService.saveMember(origin);
+        memberService.flush();
 
         //when
         Member member = createMember2();
         memberService.updateMember(memberId, member);
-        memberService.flush();
 
         //then
         Member fresh = memberService.findOne(memberId);
-        assertEquals("업데이트된 멤버의 name은 origin과 같다", origin.getName(), member.getName());
+        assertEquals("업데이트된 멤버의 name은 업데이트데이터의 name과 같다", fresh.getName(), member.getName());
 
     }
     
@@ -61,12 +59,11 @@ public class MemberServiceTest {
         //given
         Member member = createMember();
         Long memberId = memberService.saveMember(member);
+        memberService.flush();
 
         //when
-        memberService.flush();
         memberService.deleteMember(memberId);
-        memberService.flush();
-        
+
         //then
         Member found = memberService.findOne(memberId);
         assertNull("삭제된 데이터이므로 null이 나와야함", found);

@@ -3,7 +3,6 @@ package springboot.jpaManager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.repository.MemberRepository;
@@ -20,8 +19,7 @@ public class TeamService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveTeam(Long teamId, String name, String task, Company company) {
-        Team team = Team.createTeam(name, task, company);
+    public Long saveTeam(Team team) {
         return teamRepository.save(team);
     }
 
@@ -53,4 +51,7 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
+    public void flush() {
+        teamRepository.flush();
+    }
 }
