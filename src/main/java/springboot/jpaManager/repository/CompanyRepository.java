@@ -34,4 +34,8 @@ public class CompanyRepository {
     public void delete(Company company) {
         em.remove(company);
     }
+
+    public void flush() {
+        em.flush();
+    }
 }
