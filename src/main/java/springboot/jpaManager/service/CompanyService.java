@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.domain.Member;
+import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.repository.CompanyRepository;
+import springboot.jpaManager.repository.MemberRepository;
+import springboot.jpaManager.repository.TeamRepository;
 
 import java.util.List;
 
@@ -15,23 +19,31 @@ import java.util.List;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveCompany(Long id, String name, Address address) {
-        Company company = Company.createCompany(name, address);
+    public Long saveCompany(Company company) {
+
         return companyRepository.save(company);
     }
 
     @Transactional
-    public void updateCompany(Long id, String name, Address address) {
-        Company origin = companyRepository.findOne(id);
-        origin.update(name, address);
+    public void updateCompany(Long companyId, Company company) {
+        Company origin = companyRepository.findOne(companyId);
+        origin.update(company);
     }
 
     @Transactional
     public void deleteCompany(Long companyId) {
         Company company = companyRepository.findOne(companyId);
         companyRepository.delete(company);
+        List<Team> teamList = company.getTeamList();
+        for (Team team : teamList) {
+            List<Member> memberList = team.getMemberList();
+            for (Member member : memberList) {
+                memberRepository.delete(member);
+            }
+        }
     }
 
     public Company findOne(Long companyId) {
@@ -40,5 +52,9 @@ public class CompanyService {
 
     public List<Company> findAll() {
         return companyRepository.findAll();
+    }
+
+    public void flush() {
+        companyRepository.flush();
     }
 }

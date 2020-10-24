@@ -23,7 +23,7 @@ public class Company {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Team> teamList = new ArrayList<>();
 
     public static Company createCompany(String name, Address address) {
@@ -37,13 +37,11 @@ public class Company {
     }
 
     public void deleteTeam(Team team){
-        //팀 해체시 사용
-//        team.changeTeamMember();
         this.teamList.remove(team);
     }
 
-    public void update(String name, Address address) {
-        this.name = name;
-        this.address = address;
+    public void update(Company company) {
+        this.name = company.name;
+        this.address = company.address;
     }
 }
