@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>JPA MANAGER</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div class="jumbotron">
+        <h1>JPA Manager</h1>
+        <p class="lead">Company</p>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="/company/register">회사 등록</a>
+            <a class="btn btn-lg btn-secondary" href="/company/list">회사 목록</a>
+        </p>
+        <p class="lead">Team</p>
+        <p>
+            <a class="btn btn-lg btn-dark" href="/team/register">팀 등록</a>
+            <a class="btn btn-lg btn-dark" href="/team/list">팀 목록</a>
+        </p>
+        <p class="lead">Member</p>
+        <p>
+            <a class="btn btn-lg btn-info" href="/member/register">멤버 등록</a>
+            <a class="btn btn-lg btn-info" href="/member/list">멤버 목록</a>
+        </p>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
