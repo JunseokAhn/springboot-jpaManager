@@ -7,6 +7,7 @@ import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
+import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
@@ -22,8 +23,8 @@ public class CompanyService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveCompany(Company company) {
-
+    public Long saveCompany(CompanyDTO companyDTO) {
+        Company company = createCompany(companyDTO);
         return companyRepository.save(company);
     }
 
@@ -56,5 +57,16 @@ public class CompanyService {
 
     public void flush() {
         companyRepository.flush();
+    }
+
+    private Company createCompany(CompanyDTO companyDTO) {
+        String name = companyDTO.getName();
+
+        String city = companyDTO.getCity();
+        String street = companyDTO.getStreet();
+        String zipcode = companyDTO.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        return Company.createCompany(name, address);
     }
 }
