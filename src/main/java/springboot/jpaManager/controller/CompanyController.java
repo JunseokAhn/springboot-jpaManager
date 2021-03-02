@@ -3,9 +3,7 @@ package springboot.jpaManager.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.service.CompanyService;
@@ -29,7 +27,7 @@ public class CompanyController {
     @PostMapping("register")
     public String companyRegister2(CompanyDTO companyDTO) {
         companyService.saveCompany(companyDTO);
-        return "company/register";
+        return "redirect:/company/list";
     }
 
     @GetMapping("list")
@@ -37,5 +35,19 @@ public class CompanyController {
         List<Company> companyList = companyService.findAll();
         model.addAttribute("company_list", companyList);
         return "company/list";
+    }
+
+    @GetMapping("edit/{companyId}")
+    public String companyEdit(@PathVariable("companyId") Long companyId, Model model) {
+        Company company = companyService.findOne(companyId);
+        CompanyDTO companyDTO = CompanyDTO.CreateCompanyDTO(company);
+        model.addAttribute("companyDTO", companyDTO);
+        return "company/edit";
+    }
+
+    @PostMapping("edit")
+    public String companyEdit2(CompanyDTO companyDTO) {
+        companyService.updateCompany(companyDTO);
+        return "redirect:/company/list";
     }
 }

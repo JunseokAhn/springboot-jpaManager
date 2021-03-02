@@ -3,6 +3,7 @@ package springboot.jpaManager.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.dto.CompanyDTO;
 
 import javax.persistence.*;
 
@@ -40,8 +41,14 @@ public class Company {
         this.teamList.remove(team);
     }
 
-    public void update(Company company) {
-        this.name = company.name;
-        this.address = company.address;
+    public void update(CompanyDTO companyDTO) {
+
+        String city = companyDTO.getCity();
+        String street = companyDTO.getStreet();
+        String zipcode = companyDTO.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        this.name = companyDTO.getName();
+        this.address = address;
     }
 }

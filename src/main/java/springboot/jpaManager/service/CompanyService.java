@@ -29,9 +29,9 @@ public class CompanyService {
     }
 
     @Transactional
-    public void updateCompany(Long companyId, Company company) {
-        Company origin = companyRepository.findOne(companyId);
-        origin.update(company);
+    public void updateCompany(CompanyDTO companyDTO) {
+        Company origin = companyRepository.findOne(companyDTO.getId());
+        origin.update(companyDTO);
     }
 
     @Transactional
