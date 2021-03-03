@@ -12,6 +12,7 @@ import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,6 +46,27 @@ public class CompanyService {
                 memberRepository.delete(member);
             }
         }
+    }
+
+    public static CompanyDTO createCompanyDTO(Company company) {
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setId(company.getId());
+        companyDTO.setName(company.getName());
+        companyDTO.setCity(company.getAddress().getCity());
+        companyDTO.setStreet(company.getAddress().getStreet());
+        companyDTO.setZipcode(company.getAddress().getZipcode());
+        return companyDTO;
+    }
+
+
+    public static List<CompanyDTO> createCompanyDTOList(List<Company> companyList) {
+        int size = companyList.size();
+        List<CompanyDTO> companyDTOList = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            CompanyDTO companyDTO = createCompanyDTO(companyList.get(i));
+            companyDTOList.add(companyDTO);
+        }
+        return companyDTOList;
     }
 
     public Company findOne(Long companyId) {

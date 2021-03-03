@@ -33,15 +33,16 @@ public class CompanyController {
     @GetMapping("list")
     public String companyList(Model model) {
         List<Company> companyList = companyService.findAll();
-        model.addAttribute("company_list", companyList);
+        List<CompanyDTO> companyDTOList = companyService.createCompanyDTOList(companyList);
+        model.addAttribute("company_list", companyDTOList);
         return "company/list";
     }
 
     @GetMapping("edit/{companyId}")
     public String companyEdit(@PathVariable("companyId") Long companyId, Model model) {
         Company company = companyService.findOne(companyId);
-        CompanyDTO companyDTO = CompanyDTO.CreateCompanyDTO(company);
-        model.addAttribute("companyDTO", companyDTO);
+        CompanyDTO companyDTO = companyService.createCompanyDTO(company);
+        model.addAttribute("company", companyDTO);
         return "company/edit";
     }
 
