@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.*;
+import springboot.jpaManager.dto.CompanyDTO;
 
 import static org.junit.Assert.*;
 
@@ -26,8 +27,9 @@ public class CompanyServiceTest {
     public void saveCompany() throws Exception {
 
         //given
-        Company company = createCompany();
-        Long companyId = companyService.saveCompany(company);
+        Company company = this.createCompany();
+        CompanyDTO companyDTO = companyService.createCompanyDTO(company);
+        Long companyId = companyService.saveCompany(companyDTO);
 
         //when
         Company found = companyService.findOne(companyId);
@@ -41,17 +43,18 @@ public class CompanyServiceTest {
     public void updateCompany() throws Exception {
 
         //given
-        Company origin = createCompany();
-        Long companyId = companyService.saveCompany(origin);
+        Company origin = this.createCompany();
+        CompanyDTO originDTO = companyService.createCompanyDTO(origin);
+        Long companyId = companyService.saveCompany(originDTO);
         companyService.flush();
 
         //when
-        Company company = createCompany2();
-        companyService.updateCompany(companyId, company);
+        CompanyDTO companyDTO = this.createCompanyDTO();
+        companyService.updateCompany(companyDTO);
 
         //then
         Company fresh = companyService.findOne(companyId);
-        assertEquals(fresh.getName(), company.getName());
+        assertEquals(fresh.getName(), companyDTO.getName());
 
     }
 
@@ -87,11 +90,14 @@ public class CompanyServiceTest {
         return company;
     }
 
-    public Company createCompany2() {
+    public CompanyDTO createCompanyDTO() {
         Address address = Address.createAddress("city2", "street2", "zipcode2");
-        Company company = Company.createCompany("companyB", address);
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setName("companyB");
+        companyDTO.setStreet("street2");
+        companyDTO.setZipcode("zipcode2");
 
-        return company;
+        return companyDTO;
     }
 
     public Member createMember() {
