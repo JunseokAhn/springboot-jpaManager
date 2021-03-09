@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header" />
+<head th:replace="fragments/header :: header"/>
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
@@ -26,6 +26,8 @@
                 <td>
                     <a href="#" th:href="@{/company/edit/{companyId} (companyId=${company.id})}"
                        class="btn btn-primary" role="button">수정</a>
+                    <a href="#" th:href="@{/company/delete/{companyId} (companyId=${company.id})}"
+                       class="btn btn-primary" role="button">삭제</a>
                 </td>
             </tr>
             </tbody>

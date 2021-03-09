@@ -51,4 +51,10 @@ public class CompanyController {
         companyService.updateCompany(companyDTO);
         return "redirect:/company/list";
     }
+
+    @GetMapping("delete/{companyId}")
+    public String companyDelete(@PathVariable("companyId") Long companyId) {
+        companyService.deleteCompany(companyId);
+        return "redirect:/company/list";
+    }
 }
