@@ -33,6 +33,16 @@ public class Company {
         company.address = address;
         return company;
     }
+
+    public static Company createCompany(String name, String city, String street, String zipcode) {
+        Company company = new Company();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        company.name = name;
+        company.address = address;
+        return company;
+    }
+
     public void addTeam(Team team) {
         this.teamList.add(team);
     }
