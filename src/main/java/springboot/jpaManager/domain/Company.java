@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
+import static springboot.jpaManager.api.CompanyApiController.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,6 +40,35 @@ public class Company {
         Company company = new Company();
         Address address = Address.createAddress(city, street, zipcode);
 
+        company.name = name;
+        company.address = address;
+        return company;
+    }
+
+    public static Company createCompany(CompanyRequest companyRequest) {
+        Company company = new Company();
+
+        String name = companyRequest.getName();
+        String city = companyRequest.getCity();
+        String street = companyRequest.getStreet();
+        String zipcode = companyRequest.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        company.name = name;
+        company.address = address;
+        return company;
+    }
+
+    public static Company createCompany(Long id, UpdateCompanyRequest updateCompanyRequest) {
+        Company company = new Company();
+
+        String name = updateCompanyRequest.getName();
+        String city = updateCompanyRequest.getCity();
+        String street = updateCompanyRequest.getStreet();
+        String zipcode = updateCompanyRequest.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        company.id = id;
         company.name = name;
         company.address = address;
         return company;
