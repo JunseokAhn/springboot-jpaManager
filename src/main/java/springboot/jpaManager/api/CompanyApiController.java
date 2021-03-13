@@ -10,6 +10,9 @@ import springboot.jpaManager.service.CompanyService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/company")
@@ -39,6 +42,21 @@ public class CompanyApiController {
         Company updated = companyService.findOne(id);
 
         return new UpdateCompanyResponse(updated);
+    }
+
+    @GetMapping("list")
+    public CompanyListResponse listCompany() {
+        List<Company> companyList = companyService.findAll();
+        List<CompanyDTO> companyDTOList = companyList.stream().map(m -> new CompanyDTO(m.getId(), m.getName(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode())).collect(Collectors.toList());
+
+        return new CompanyListResponse(companyDTOList.size(), companyDTOList);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class CompanyListResponse<T> {
+        private int count;
+        private T data;
     }
 
     @Data
@@ -86,4 +104,5 @@ public class CompanyApiController {
         private String street;
         private String zipcode;
     }
+
 }
