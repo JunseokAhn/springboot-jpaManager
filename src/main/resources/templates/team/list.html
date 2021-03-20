@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>회사명</th>
+                <th>도시</th>
+                <th>거리</th>
+                <th>우편번호</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="team : ${team_list}">
+                <td th:text="${team.id}"></td>
+                <td th:text="${team.name}"></td>
+                <td th:text="${team.city}"></td>
+                <td th:text="${team.street}"></td>
+                <td th:text="${team.zipcode}"></td>
+                <td>
+                    <a href="#" th:href="@{/team/edit/{teamId} (teamId=${team.id})}"
+                       class="btn btn-primary" role="button">수정</a>
+                    <a href="#" th:href="@{/team/delete/{teamId} (teamId=${team.id})}"
+                       class="btn btn-primary" role="button">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
