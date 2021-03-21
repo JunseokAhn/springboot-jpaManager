@@ -10,10 +10,8 @@ import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
-import springboot.jpaManager.repository.TeamRepository;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +23,7 @@ public class CompanyService {
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
-        Company company = createCompany(companyDTO);
+        Company company = transEntity(companyDTO);
         return companyRepository.save(company);
     }
 
@@ -48,27 +46,6 @@ public class CompanyService {
         }
     }
 
-    public static CompanyDTO createCompanyDTO(Company company) {
-        CompanyDTO companyDTO = new CompanyDTO();
-        companyDTO.setId(company.getId());
-        companyDTO.setName(company.getName());
-        companyDTO.setCity(company.getAddress().getCity());
-        companyDTO.setStreet(company.getAddress().getStreet());
-        companyDTO.setZipcode(company.getAddress().getZipcode());
-        return companyDTO;
-    }
-
-
-    public static List<CompanyDTO> createCompanyDTOList(List<Company> companyList) {
-        int size = companyList.size();
-        List<CompanyDTO> companyDTOList = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            CompanyDTO companyDTO = createCompanyDTO(companyList.get(i));
-            companyDTOList.add(companyDTO);
-        }
-        return companyDTOList;
-    }
-
     public Company findOne(Long companyId) {
         return companyRepository.findOne(companyId);
     }
@@ -81,7 +58,7 @@ public class CompanyService {
         companyRepository.flush();
     }
 
-    private Company createCompany(CompanyDTO companyDTO) {
+    private Company transEntity(CompanyDTO companyDTO) {
         String name = companyDTO.getName();
 
         String city = companyDTO.getCity();
@@ -90,5 +67,24 @@ public class CompanyService {
         Address address = Address.createAddress(city, street, zipcode);
 
         return Company.createCompany(name, address);
+    }
+
+    public static CompanyDTO transDTO(Company company) {
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setId(company.getId());
+        companyDTO.setName(company.getName());
+        companyDTO.setCity(company.getAddress().getCity());
+        companyDTO.setStreet(company.getAddress().getStreet());
+        companyDTO.setZipcode(company.getAddress().getZipcode());
+        return companyDTO;
+    }
+
+    public static List<CompanyDTO> transDTOList(List<Company> companyList) {
+
+        List<CompanyDTO> companyDTOList = companyList.stream().map(m -> new CompanyDTO
+                (m.getId(), m.getName(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode()))
+                .collect(Collectors.toList());
+
+        return companyDTOList;
     }
 }

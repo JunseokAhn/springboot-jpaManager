@@ -28,7 +28,7 @@ public class CompanyServiceTest {
 
         //given
         Company company = this.createCompany();
-        CompanyDTO companyDTO = companyService.createCompanyDTO(company);
+        CompanyDTO companyDTO = companyService.transDTO(company);
         Long companyId = companyService.saveCompany(companyDTO);
 
         //when
@@ -44,7 +44,7 @@ public class CompanyServiceTest {
 
         //given
         Company origin = this.createCompany();
-        CompanyDTO originDTO = companyService.createCompanyDTO(origin);
+        CompanyDTO originDTO = companyService.transDTO(origin);
         Long companyId = companyService.saveCompany(originDTO);
         companyService.flush();
 

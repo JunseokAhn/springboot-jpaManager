@@ -11,8 +11,6 @@ import springboot.jpaManager.service.CompanyService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/company")
@@ -25,7 +23,7 @@ public class CompanyApiController {
     public CompanyResponse createCompany(@RequestBody @Valid CompanyRequest request) {
 
         Company company = Company.createCompany(request);
-        CompanyDTO companyDTO = companyService.createCompanyDTO(company);
+        CompanyDTO companyDTO = companyService.transDTO(company);
         Long id = companyService.saveCompany(companyDTO);
         return new CompanyResponse(id);
     }
@@ -36,7 +34,7 @@ public class CompanyApiController {
             @RequestBody @Valid UpdateCompanyRequest request) {
 
         Company company = Company.createCompany(id, request);
-        CompanyDTO companyDTO = companyService.createCompanyDTO(company);
+        CompanyDTO companyDTO = companyService.transDTO(company);
         companyService.updateCompany(companyDTO);
 
         Company updated = companyService.findOne(id);
@@ -47,8 +45,7 @@ public class CompanyApiController {
     @GetMapping("list")
     public CompanyListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyList.stream().map(m -> new CompanyDTO(m.getId(), m.getName(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode())).collect(Collectors.toList());
-
+        List<CompanyDTO> companyDTOList = companyService.transDTOList(companyList);
         return new CompanyListResponse(companyDTOList.size(), companyDTOList);
     }
 
