@@ -3,8 +3,10 @@ package springboot.jpaManager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
+import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
 
@@ -15,11 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
 
+    private final CompanyService companyService;
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveTeam(Team team) {
+    public Long saveTeam(TeamDTO teamDTO) {
+        Team team = transEntity(teamDTO);
         return teamRepository.save(team);
     }
 
@@ -53,5 +57,15 @@ public class TeamService {
 
     public void flush() {
         teamRepository.flush();
+    }
+
+    public Team transEntity(TeamDTO teamDTO) {
+
+        String name = teamDTO.getName();
+        String task = teamDTO.getTask();
+        Long companyId = teamDTO.getCompanyId();
+        Company company = companyService.findOne(companyId);
+
+        return Team.createTeam(name, task, company);
     }
 }

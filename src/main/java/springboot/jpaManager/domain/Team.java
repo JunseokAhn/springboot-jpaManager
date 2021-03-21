@@ -3,6 +3,8 @@ package springboot.jpaManager.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.dto.TeamDTO;
+import springboot.jpaManager.service.CompanyService;
 
 import javax.persistence.*;
 import java.util.List;
