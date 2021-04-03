@@ -6,11 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
+import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,5 +69,14 @@ public class TeamService {
         Company company = companyService.findOne(companyId);
 
         return Team.createTeam(name, task, company);
+    }
+
+    public List<TeamDTO> transDTOList(List<Team> teamList){
+
+        List<TeamDTO> teamDTOList = teamList.stream().map(m -> new TeamDTO
+                (m.getId(), m.getCompany().getId(), m.getName(), m.getTask(), m.getCompany().getName(), m.getMemberCount())
+        ).collect(Collectors.toList());
+
+        return teamDTOList;
     }
 }

@@ -64,4 +64,8 @@ public class Team {
         this.company = team.company;
         this.company.addTeam(this);
     }
+
+    public int getMemberCount(){
+        return memberList.size();
+    }
 }

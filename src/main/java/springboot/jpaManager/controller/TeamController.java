@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.service.CompanyService;
@@ -40,7 +41,10 @@ public class TeamController {
     }
 
     @GetMapping("list")
-    public String teamList() {
-        return "redirect:/";
+    public String teamList(Model model) {
+        List<Team> teamList = teamService.findAll();
+        List<TeamDTO> teamDTOList = teamService.transDTOList(teamList);
+        model.addAttribute("teamDTOList", teamDTOList);
+        return "team/list";
     }
 }
