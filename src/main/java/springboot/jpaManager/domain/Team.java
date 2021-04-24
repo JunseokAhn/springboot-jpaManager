@@ -56,12 +56,12 @@ public class Team {
         }
     }
 
-    public void updateTeam(Team team) {
-        this.id = team.id;
-        this.name = team.name;
-        this.task = team.task;
+    public void updateTeam(TeamDTO teamDTO, Company company) {
+        this.id = teamDTO.getId();
+        this.name = teamDTO.getName();
+        this.task = teamDTO.getTask();
         this.company.deleteTeam(this);
-        this.company = team.company;
+        this.company = company;
         this.company.addTeam(this);
     }
 

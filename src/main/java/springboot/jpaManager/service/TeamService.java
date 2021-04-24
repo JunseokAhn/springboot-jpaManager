@@ -30,9 +30,11 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeam(Long teamId, Team team) {
-        Team origin = teamRepository.findOne(teamId);
-        origin.updateTeam(team);
+    public void updateTeam(TeamDTO teamDTO) {
+        Team origin = findOne(teamDTO.getId());
+        Company company = companyService.findOne(teamDTO.getCompanyId());
+
+        origin.updateTeam(teamDTO,company);
     }
 
     @Transactional
@@ -78,5 +80,20 @@ public class TeamService {
         ).collect(Collectors.toList());
 
         return teamDTOList;
+    }
+
+    public TeamDTO transDTO(Team team) {
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setId(team.getId());
+        teamDTO.setName(team.getName());
+        teamDTO.setTask(team.getTask());
+        Long companyId = team.getCompany().getId();
+        teamDTO.setMemberCount(team.getMemberCount());
+
+        teamDTO.setCompanyId(companyId);
+        Company company = companyService.findOne(companyId);
+        teamDTO.setCompanyName(company.getName());
+
+        return teamDTO;
     }
 }
