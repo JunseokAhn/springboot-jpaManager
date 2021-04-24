@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.*;
+import springboot.jpaManager.dto.TeamDTO;
 
 import static org.junit.Assert.*;
 
@@ -24,14 +25,14 @@ public class TeamServiceTest {
     public void saveTeam() throws Exception {
 
         //given
-        Team team = createTeam();
-        Long teamId = teamService.saveTeam(team);
+        TeamDTO teamDTO = createTeamDTO();
+        Long teamId = teamService.saveTeam(teamDTO);
 
         //when
         Team found = teamService.findOne(teamId);
 
         //then
-        assertEquals(found, team);
+        assertEquals(found, teamDTO);
 
     }
 
@@ -39,17 +40,17 @@ public class TeamServiceTest {
     public void updateTeam() throws Exception {
 
         //given
-        Team origin = createTeam();
+        TeamDTO origin = createTeamDTO();
         Long teamId = teamService.saveTeam(origin);
         teamService.flush();
 
         //when
-        Team team = createTeam2();
-        teamService.updateTeam(teamId, team);
+        TeamDTO teamDTO = createTeamDTO2();
+        teamService.updateTeam(teamDTO);
 
         //then
         Team fresh = teamService.findOne(teamId);
-        assertEquals(fresh.getName(), team.getName());
+        assertEquals(fresh.getName(), teamDTO.getName());
 
     }
 
@@ -57,8 +58,8 @@ public class TeamServiceTest {
     public void deleteTeam() throws Exception {
 
         //given
-        Team team = createTeam();
-        Long teamId = teamService.saveTeam(team);
+        TeamDTO teamDTO = createTeamDTO();
+        Long teamId = teamService.saveTeam(teamDTO);
         teamService.flush();
 
         //when
@@ -73,8 +74,8 @@ public class TeamServiceTest {
     @Test
     public void teamMemberWait() throws Exception {
         //given
-        Team team = createTeam();
-        Long teamId = teamService.saveTeam(team);
+        TeamDTO teamDTO = createTeamDTO();
+        Long teamId = teamService.saveTeam(teamDTO);
         teamService.flush();
 
         Member member = createMember();
@@ -100,8 +101,8 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
         memberService.flush();
 
-        Team team = createTeam();
-        Long teamId = teamService.saveTeam(team);
+        Team teamDTO = createTeamDTO();
+        Long teamId = teamService.saveTeam(teamDTO);
         teamService.flush();
 
         //when
@@ -115,19 +116,37 @@ public class TeamServiceTest {
         assertEquals("멤버의 팀에는 추가한 팀이 들어감", foundMember.getTeam(), foundTeam);
     }
 
-    public Team createTeam() {
-        Address address = Address.createAddress("city", "street", "zipcode");
-        Company company = Company.createCompany("companyA", address);
-        Team team = Team.createTeam("teamA", "test", company);
+    public TeamDTO createTeamDTO() {
+        Long companyId = 1l;
+        String name = "teamA";
+        String task = "taskA";
+        String companyName = "companyA";
+        int memberCount = 0;
 
-        return team;
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setCompanyId(companyId);
+        teamDTO.setName(name);
+        teamDTO.setTask(task);
+        teamDTO.setCompanyName(companyName);
+        teamDTO.setMemberCount(memberCount);
+
+        return teamDTO;
     }
-    public Team createTeam2() {
-        Address address = Address.createAddress("city2", "street2", "zipcode2");
-        Company company = Company.createCompany("companyB", address);
-        Team team = Team.createTeam("teamB", "test2", company);
+    public TeamDTO createTeamDTO2() {
+        Long companyId = 2l;
+        String name = "teamB";
+        String task = "taskB";
+        String companyName = "companyB";
+        int memberCount = 0;
 
-        return team;
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setCompanyId(companyId);
+        teamDTO.setName(name);
+        teamDTO.setTask(task);
+        teamDTO.setCompanyName(companyName);
+        teamDTO.setMemberCount(memberCount);
+
+        return teamDTO;
     }
 
     public Member createMember() {
