@@ -7,6 +7,7 @@ import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.MemberStatus;
 import springboot.jpaManager.domain.Team;
+import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.repository.MemberRepository;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TeamService teamService;
 
     @Transactional
-    public Long saveMember(Member member) {
+    public Long saveMember(MemberDTO memberDTO) {
 
+        Member member = tranceEntity(memberDTO);
         return memberRepository.save(member);
     }
 
@@ -34,6 +37,29 @@ public class MemberService {
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findOne(memberId);
         memberRepository.delete(member);
+    }
+
+    private Member tranceEntity(MemberDTO memberDTO) {
+
+        int salary = 0;
+        if (memberDTO.getSalary() != null)
+            salary = memberDTO.getSalary();
+
+        String rank = "신입";
+        if (memberDTO.getRank() != null)
+            rank = memberDTO.getRank();
+
+        MemberStatus status = MemberStatus.WAIT;
+
+        String name = memberDTO.getName();
+        String city = memberDTO.getCity();
+        String street = memberDTO.getStreet();
+        String zipcode = memberDTO.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+
+        Team team = teamService.findOne(memberDTO.getTeamId());
+        Member member = Member.createMember(name, salary, rank, address, status, team);
+        return member;
     }
 
     public Member findOne(Long memberId) {
