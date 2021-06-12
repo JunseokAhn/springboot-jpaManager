@@ -11,6 +11,7 @@ import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.repository.MemberRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,12 +42,12 @@ public class MemberService {
 
     private Member tranceEntity(MemberDTO memberDTO) {
 
-        int salary = 0;
+        int salary = 3000000;
         if (memberDTO.getSalary() != null)
             salary = memberDTO.getSalary();
 
         String rank = "신입";
-        if (memberDTO.getRank() != null)
+        if (memberDTO.getRank() == "")
             rank = memberDTO.getRank();
 
         MemberStatus status = MemberStatus.WAIT;
@@ -76,5 +77,15 @@ public class MemberService {
 
     public void flush() {
         memberRepository.flush();
+    }
+
+    public List<MemberDTO> transDTOList(List<Member> memberList) {
+
+        List<MemberDTO> memberDTOList =
+                memberList.stream().map(m -> new MemberDTO(
+                        m.getId(), m.getName(), m.getSalary(), m.getRank(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode(), m.getStatus(), m.getTeam().getId(), m.getTeam().getName(), m.getTeam().getCompany().getId(), m.getTeam().getCompany().getName()
+                )).collect(Collectors.toList());
+
+        return memberDTOList;
     }
 }

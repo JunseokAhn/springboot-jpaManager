@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
@@ -47,11 +48,16 @@ public class MemberController {
 
         memberService.saveMember(memberDTO);
 
-        return "member/list";
+        return "redirect:/member/list";
     }
 
     @GetMapping("list")
-    public String memberList(){
+    public String memberList(Model model){
+
+        List<Member> memberList = memberService.findAll();
+        List<MemberDTO> memberDTOList = memberService.transDTOList(memberList);
+        model.addAttribute("memberList", memberDTOList);
+
 
         return "member/list";
     }

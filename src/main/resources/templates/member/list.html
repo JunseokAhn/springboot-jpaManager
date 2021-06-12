@@ -10,19 +10,23 @@
             <tr>
                 <th>#</th>
                 <th>회사명</th>
-                <th>도시</th>
-                <th>거리</th>
-                <th>우편번호</th>
+                <th>팀</th>
+                <th>이름</th>
+                <th>등급</th>
+                <th>급여</th>
+                <th>상태</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="member : ${member_list}">
-                <td th:text="${member.id}"></td>
+            <tr th:each="member : ${memberList}">
+                <td/>
+                <td th:text="${member.companyName}"></td>
+                <td th:text="${member.teamName}"></td>
                 <td th:text="${member.name}"></td>
-                <td th:text="${member.city}"></td>
-                <td th:text="${member.street}"></td>
-                <td th:text="${member.zipcode}"></td>
+                <td th:text="${member.rank}"></td>
+                <td th:text="${member.salary}"></td>
+                <td th:text="${member.status}"></td>
                 <td>
                     <a href="#" th:href="@{/member/edit/{memberId} (memberId=${member.id})}"
                        class="btn btn-primary" role="button">수정</a>
