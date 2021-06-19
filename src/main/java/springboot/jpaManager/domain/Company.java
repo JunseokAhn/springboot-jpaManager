@@ -36,26 +36,12 @@ public class Company {
         return company;
     }
 
-    public static Company createCompany(String name, String city, String street, String zipcode) {
+    public static final Company createCompany(CompanyRequest companyRequest) {
+
         Company company = new Company();
-        Address address = Address.createAddress(city, street, zipcode);
+        company.name = companyRequest.getName();
+        company.address = companyRequest.getAddress().transEntity();
 
-        company.name = name;
-        company.address = address;
-        return company;
-    }
-
-    public static Company createCompany(CompanyRequest companyRequest) {
-        Company company = new Company();
-
-        String name = companyRequest.getName();
-        String city = companyRequest.getCity();
-        String street = companyRequest.getStreet();
-        String zipcode = companyRequest.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
-
-        company.name = name;
-        company.address = address;
         return company;
     }
 

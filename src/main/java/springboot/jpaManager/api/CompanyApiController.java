@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.service.CompanyService;
 
@@ -33,8 +34,7 @@ public class CompanyApiController {
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdateCompanyRequest request) {
 
-        Company company = Company.createCompany(id, request);
-        CompanyDTO companyDTO = companyService.transDTO(company);
+        CompanyDTO companyDTO = companyService.transDTO(id, request);
         companyService.updateCompany(companyDTO);
 
         Company updated = companyService.findOne(id);
@@ -69,37 +69,27 @@ public class CompanyApiController {
     public static class CompanyRequest {
         @NotEmpty
         private String name;
-        @NotEmpty
-        private String city;
-        @NotEmpty
-        private String street;
-        @NotEmpty
-        private String zipcode;
+        @Valid
+        private AddressDTO address;
     }
 
     @Data
     static class UpdateCompanyResponse {
         private Long id;
         private String name;
-        private String city;
-        private String street;
-        private String zipcode;
+        private AddressDTO address;
 
         UpdateCompanyResponse(Company company) {
             this.id = company.getId();
             this.name = company.getName();
-            this.city = company.getAddress().getCity();
-            this.street = company.getAddress().getStreet();
-            this.zipcode = company.getAddress().getZipcode();
+            this.address = company.getAddress().transDTO();
         }
     }
 
     @Data
     public static class UpdateCompanyRequest {
         private String name;
-        private String city;
-        private String street;
-        private String zipcode;
+        private AddressDTO address;
     }
 
 }

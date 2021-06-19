@@ -8,6 +8,7 @@ import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
+import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
@@ -83,16 +84,11 @@ public class CompanyService {
         CompanyDTO companyDTO = new CompanyDTO();
 
         String name = updateCompanyRequest.getName();
-        String city = updateCompanyRequest.getCity();
-        String street = updateCompanyRequest.getStreet();
-        String zipcode = updateCompanyRequest.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
-        List<Address> addresses = new ArrayList<>();
-        addresses.add(address);
+        AddressDTO address = updateCompanyRequest.getAddress();
 
         companyDTO.setId(id);
         companyDTO.setName(name);
-        companyDTO.setAddress(companyDTO.getAddress());
+        companyDTO.setAddress(address);
 
         return companyDTO;
     }
