@@ -26,6 +26,7 @@ public class CompanyController {
 
     @PostMapping("register")
     public String companyRegister2(CompanyDTO companyDTO) {
+
         companyService.saveCompany(companyDTO);
         return "redirect:/company/list";
     }

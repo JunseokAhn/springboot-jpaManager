@@ -3,6 +3,7 @@ package springboot.jpaManager.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.domain.Company;
 
 @Data
 @AllArgsConstructor
@@ -11,8 +12,12 @@ public class CompanyDTO {
 
     private Long id;
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+    private AddressDTO address;
+
+    public CompanyDTO(Company company) {
+        this.id = company.getId();
+        this.name = company.getName();
+        this.address = company.getAddress().transDTO();
+    }
 
 }

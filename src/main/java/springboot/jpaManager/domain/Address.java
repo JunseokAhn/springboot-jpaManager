@@ -3,6 +3,7 @@ package springboot.jpaManager.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.dto.AddressDTO;
 
 import javax.persistence.Embeddable;
 
@@ -28,5 +29,10 @@ public class Address {
         this.city = city;
         this.street = street;
         this.zipcode = zipcode;
+    }
+
+    public AddressDTO transDTO() {
+
+        return new AddressDTO(city, street, zipcode);
     }
 }

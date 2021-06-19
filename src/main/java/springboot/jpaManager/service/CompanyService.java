@@ -3,6 +3,7 @@ package springboot.jpaManager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.jpaManager.api.CompanyApiController;
 import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
@@ -10,8 +11,12 @@ import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static springboot.jpaManager.api.CompanyApiController.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,11 +65,7 @@ public class CompanyService {
 
     private Company transEntity(CompanyDTO companyDTO) {
         String name = companyDTO.getName();
-
-        String city = companyDTO.getCity();
-        String street = companyDTO.getStreet();
-        String zipcode = companyDTO.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
+        Address address = companyDTO.getAddress().transEntity();
 
         return Company.createCompany(name, address);
     }
@@ -73,17 +74,32 @@ public class CompanyService {
         CompanyDTO companyDTO = new CompanyDTO();
         companyDTO.setId(company.getId());
         companyDTO.setName(company.getName());
-        companyDTO.setCity(company.getAddress().getCity());
-        companyDTO.setStreet(company.getAddress().getStreet());
-        companyDTO.setZipcode(company.getAddress().getZipcode());
+        companyDTO.setAddress(company.getAddress().transDTO());
+
+        return companyDTO;
+    }
+
+    public static CompanyDTO transDTO(Long id, UpdateCompanyRequest updateCompanyRequest) {
+        CompanyDTO companyDTO = new CompanyDTO();
+
+        String name = updateCompanyRequest.getName();
+        String city = updateCompanyRequest.getCity();
+        String street = updateCompanyRequest.getStreet();
+        String zipcode = updateCompanyRequest.getZipcode();
+        Address address = Address.createAddress(city, street, zipcode);
+        List<Address> addresses = new ArrayList<>();
+        addresses.add(address);
+
+        companyDTO.setId(id);
+        companyDTO.setName(name);
+        companyDTO.setAddress(companyDTO.getAddress());
+
         return companyDTO;
     }
 
     public static List<CompanyDTO> transDTOList(List<Company> companyList) {
 
-        List<CompanyDTO> companyDTOList = companyList.stream().map(m -> new CompanyDTO
-                (m.getId(), m.getName(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode()))
-                .collect(Collectors.toList());
+        List<CompanyDTO> companyDTOList = companyList.stream().map(CompanyDTO::new).collect(Collectors.toList());
 
         return companyDTOList;
     }

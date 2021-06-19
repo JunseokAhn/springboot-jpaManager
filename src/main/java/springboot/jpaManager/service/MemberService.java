@@ -53,13 +53,11 @@ public class MemberService {
         MemberStatus status = MemberStatus.WAIT;
 
         String name = memberDTO.getName();
-        String city = memberDTO.getCity();
-        String street = memberDTO.getStreet();
-        String zipcode = memberDTO.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
+        Address address = memberDTO.getAddress().transEntity();
 
         Team team = teamService.findOne(memberDTO.getTeamId());
         Member member = Member.createMember(name, salary, rank, address, status, team);
+
         return member;
     }
 
@@ -81,10 +79,8 @@ public class MemberService {
 
     public List<MemberDTO> transDTOList(List<Member> memberList) {
 
-        List<MemberDTO> memberDTOList =
-                memberList.stream().map(m -> new MemberDTO(
-                        m.getId(), m.getName(), m.getSalary(), m.getRank(), m.getAddress().getCity(), m.getAddress().getStreet(), m.getAddress().getZipcode(), m.getStatus(), m.getTeam().getId(), m.getTeam().getName(), m.getTeam().getCompany().getId(), m.getTeam().getCompany().getName()
-                )).collect(Collectors.toList());
+        List<MemberDTO> memberDTOList = memberList.stream()
+                .map(MemberDTO::new).collect(Collectors.toList());
 
         return memberDTOList;
     }

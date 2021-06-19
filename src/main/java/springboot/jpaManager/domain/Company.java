@@ -29,7 +29,7 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Team> teamList = new ArrayList<>();
 
-    public static Company createCompany(String name, Address address) {
+    public static final Company createCompany(String name, Address address) {
         Company company = new Company();
         company.name = name;
         company.address = address;
@@ -59,21 +59,6 @@ public class Company {
         return company;
     }
 
-    public static Company createCompany(Long id, UpdateCompanyRequest updateCompanyRequest) {
-        Company company = new Company();
-
-        String name = updateCompanyRequest.getName();
-        String city = updateCompanyRequest.getCity();
-        String street = updateCompanyRequest.getStreet();
-        String zipcode = updateCompanyRequest.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
-
-        company.id = id;
-        company.name = name;
-        company.address = address;
-        return company;
-    }
-
     public void addTeam(Team team) {
         this.teamList.add(team);
     }
@@ -84,12 +69,7 @@ public class Company {
 
     public void update(CompanyDTO companyDTO) {
 
-        String city = companyDTO.getCity();
-        String street = companyDTO.getStreet();
-        String zipcode = companyDTO.getZipcode();
-        Address address = Address.createAddress(city, street, zipcode);
-
         this.name = companyDTO.getName();
-        this.address = address;
+        this.address = companyDTO.getAddress().transEntity();
     }
 }

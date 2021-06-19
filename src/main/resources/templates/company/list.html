@@ -20,9 +20,9 @@
             <tr th:each="company : ${company_list}">
                 <td th:text="${company.id}"></td>
                 <td th:text="${company.name}"></td>
-                <td th:text="${company.city}"></td>
-                <td th:text="${company.street}"></td>
-                <td th:text="${company.zipcode}"></td>
+                <td th:text="${company.address.city}"></td>
+                <td th:text="${company.address.street}"></td>
+                <td th:text="${company.address.zipcode}"></td>
                 <td>
                     <a href="#" th:href="@{/company/edit/{companyId} (companyId=${company.id})}"
                        class="btn btn-primary" role="button">수정</a>
