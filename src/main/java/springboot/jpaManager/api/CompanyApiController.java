@@ -23,7 +23,11 @@ public class CompanyApiController {
     @PostMapping("create")
     public CompanyResponse createCompany(@RequestBody @Valid CompanyRequest request) {
 
-        Company company = Company.createCompany(request);
+        Company company = Company.builder()
+                .name(request.getName())
+                .address(request.getAddress().transEntity())
+                .build();
+
         CompanyDTO companyDTO = companyService.transDTO(company);
         Long id = companyService.saveCompany(companyDTO);
         return new CompanyResponse(id);

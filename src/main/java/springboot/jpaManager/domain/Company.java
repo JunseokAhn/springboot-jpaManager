@@ -30,20 +30,11 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Team> teamList = new ArrayList<>();
 
-    public static final Company createCompany(String name, Address address) {
-        Company company = new Company();
-        company.name = name;
-        company.address = address;
-        return company;
-    }
-
-    public static final Company createCompany(CompanyRequest companyRequest) {
-
-        Company company = new Company();
-        company.name = companyRequest.getName();
-        company.address = companyRequest.getAddress().transEntity();
-
-        return company;
+    @Builder
+    public Company(Long id, String name, Address address){
+        this.id = id;
+        this.name = name;
+        this.address = address;
     }
 
     public void addTeam(Team team) {

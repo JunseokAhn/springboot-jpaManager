@@ -65,37 +65,36 @@ public class CompanyService {
     }
 
     private Company transEntity(CompanyDTO companyDTO) {
-        String name = companyDTO.getName();
-        Address address = companyDTO.getAddress().transEntity();
 
-        return Company.createCompany(name, address);
+        return Company.builder()
+                .name(companyDTO.getName())
+                .address(companyDTO.getAddress().transEntity())
+                .build();
     }
 
     public static CompanyDTO transDTO(Company company) {
-        CompanyDTO companyDTO = new CompanyDTO();
-        companyDTO.setId(company.getId());
-        companyDTO.setName(company.getName());
-        companyDTO.setAddress(company.getAddress().transDTO());
 
-        return companyDTO;
+        return CompanyDTO.builder()
+                .id(company.getId())
+                .name(company.getName())
+                .address(company.getAddress().transDTO())
+                .build();
     }
 
     public static CompanyDTO.UpdateAll transDTO(Long id, UpdateCompanyRequest updateCompanyRequest) {
-        CompanyDTO.UpdateAll companyDTO = new CompanyDTO.UpdateAll();
 
-        String name = updateCompanyRequest.getName();
-        AddressDTO address = updateCompanyRequest.getAddress();
-
-        companyDTO.setId(id);
-        companyDTO.setName(name);
-        companyDTO.setAddress(address);
-
-        return companyDTO;
+        return CompanyDTO.UpdateAll.builder()
+                .id(id)
+                .name(updateCompanyRequest.getName())
+                .address(updateCompanyRequest.getAddress())
+                .build();
     }
 
     public static List<CompanyDTO> transDTOList(List<Company> companyList) {
 
-        List<CompanyDTO> companyDTOList = companyList.stream().map(CompanyDTO::new).collect(Collectors.toList());
+        List<CompanyDTO> companyDTOList = companyList.stream()
+                .map(CompanyDTO::new)
+                .collect(Collectors.toList());
 
         return companyDTOList;
     }
