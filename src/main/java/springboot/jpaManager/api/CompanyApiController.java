@@ -34,7 +34,7 @@ public class CompanyApiController {
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdateCompanyRequest request) {
 
-        CompanyDTO companyDTO = companyService.transDTO(id, request);
+        CompanyDTO.UpdateAll companyDTO = companyService.transDTO(id, request);
         companyService.updateCompany(companyDTO);
 
         Company updated = companyService.findOne(id);

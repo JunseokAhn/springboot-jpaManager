@@ -1,6 +1,7 @@
 package springboot.jpaManager.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -53,7 +54,7 @@ public class Company {
         this.teamList.remove(team);
     }
 
-    public void update(CompanyDTO companyDTO) {
+    public void update(CompanyDTO.UpdateAll companyDTO) {
 
         this.name = companyDTO.getName();
         this.address = companyDTO.getAddress().transEntity();

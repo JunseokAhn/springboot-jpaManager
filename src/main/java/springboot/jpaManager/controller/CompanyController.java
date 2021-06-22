@@ -48,7 +48,7 @@ public class CompanyController {
     }
 
     @PostMapping("edit")
-    public String companyEdit2(CompanyDTO companyDTO) {
+    public String companyEdit2(CompanyDTO.UpdateAll companyDTO) {
         companyService.updateCompany(companyDTO);
         return "redirect:/company/list";
     }

@@ -20,4 +20,13 @@ public class CompanyDTO {
         this.address = company.getAddress().transDTO();
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateAll{
+        private Long id;
+        private String name;
+        private AddressDTO address;
+    }
+
 }

@@ -34,7 +34,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public void updateCompany(CompanyDTO companyDTO) {
+    public void updateCompany(CompanyDTO.UpdateAll companyDTO) {
         Company origin = companyRepository.findOne(companyDTO.getId());
         origin.update(companyDTO);
     }
@@ -80,8 +80,8 @@ public class CompanyService {
         return companyDTO;
     }
 
-    public static CompanyDTO transDTO(Long id, UpdateCompanyRequest updateCompanyRequest) {
-        CompanyDTO companyDTO = new CompanyDTO();
+    public static CompanyDTO.UpdateAll transDTO(Long id, UpdateCompanyRequest updateCompanyRequest) {
+        CompanyDTO.UpdateAll companyDTO = new CompanyDTO.UpdateAll();
 
         String name = updateCompanyRequest.getName();
         AddressDTO address = updateCompanyRequest.getAddress();
