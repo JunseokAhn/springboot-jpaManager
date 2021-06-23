@@ -31,7 +31,7 @@ public class Address {
         this.zipcode = zipcode;
     }
 
-    public AddressDTO transDTO() {
+    public AddressDTO createDTO() {
 
         return new AddressDTO(city, street, zipcode);
     }

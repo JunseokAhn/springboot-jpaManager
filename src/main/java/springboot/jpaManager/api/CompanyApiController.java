@@ -25,10 +25,10 @@ public class CompanyApiController {
 
         Company company = Company.builder()
                 .name(request.getName())
-                .address(request.getAddress().transEntity())
+                .address(request.getAddress().createEntity())
                 .build();
 
-        CompanyDTO companyDTO = CompanyDTO.transDTO(company);
+        CompanyDTO companyDTO = CompanyDTO.createDTO(company);
         Long id = companyService.saveCompany(companyDTO);
         return new CompanyResponse(id);
     }
@@ -38,7 +38,7 @@ public class CompanyApiController {
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdateCompanyRequest request) {
 
-        CompanyDTO.UpdateAll companyDTO = CompanyDTO.UpdateAll.transDTO(id, request);
+        CompanyDTO.UpdateAll companyDTO = CompanyDTO.UpdateAll.createDTO(id, request);
         companyService.updateCompany(companyDTO);
         Company updated = companyService.findOne(id);
 
@@ -48,7 +48,7 @@ public class CompanyApiController {
     @GetMapping("list")
     public CompanyListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyService.transDTOList(companyList);
+        List<CompanyDTO> companyDTOList = CompanyDTO.transDTOList(companyList);
         return new CompanyListResponse(companyDTOList.size(), companyDTOList);
     }
 
@@ -85,7 +85,7 @@ public class CompanyApiController {
         UpdateCompanyResponse(Company company) {
             this.id = company.getId();
             this.name = company.getName();
-            this.address = company.getAddress().transDTO();
+            this.address = company.getAddress().createDTO();
         }
     }
 

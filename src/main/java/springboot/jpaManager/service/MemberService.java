@@ -24,7 +24,7 @@ public class MemberService {
     @Transactional
     public Long saveMember(MemberDTO memberDTO) {
 
-        Member member = tranceEntity(memberDTO);
+        Member member = createEntity(memberDTO);
         return memberRepository.save(member);
     }
 
@@ -40,7 +40,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    private Member tranceEntity(MemberDTO memberDTO) {
+    private Member createEntity(MemberDTO memberDTO) {
 
         int salary = 3000000;
         if (memberDTO.getSalary() != null)
@@ -53,7 +53,7 @@ public class MemberService {
         MemberStatus status = MemberStatus.WAIT;
 
         String name = memberDTO.getName();
-        Address address = memberDTO.getAddress().transEntity();
+        Address address = memberDTO.getAddress().createEntity();
 
         Team team = teamService.findOne(memberDTO.getTeamId());
         Member member = Member.createMember(name, salary, rank, address, status, team);
@@ -84,4 +84,5 @@ public class MemberService {
 
         return memberDTOList;
     }
+
 }

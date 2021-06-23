@@ -3,21 +3,15 @@ package springboot.jpaManager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.api.CompanyApiController;
-import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
-import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static springboot.jpaManager.api.CompanyApiController.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,7 +23,7 @@ public class CompanyService {
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
-        Company company = transEntity(companyDTO);
+        Company company = companyDTO.createEntity(companyDTO);
         return companyRepository.save(company);
     }
 
@@ -64,22 +58,8 @@ public class CompanyService {
         companyRepository.flush();
     }
 
-    private Company transEntity(CompanyDTO companyDTO) {
-
-        return Company.builder()
-                .name(companyDTO.getName())
-                .address(companyDTO.getAddress().transEntity())
-                .build();
-    }
 
 
-
-    public static List<CompanyDTO> transDTOList(List<Company> companyList) {
-
-        List<CompanyDTO> companyDTOList = companyList.stream()
-                .map(CompanyDTO::new)
-                .collect(Collectors.toList());
-
-        return companyDTOList;
-    }
 }
+
+

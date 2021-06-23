@@ -27,7 +27,7 @@ public class MemberDTO {
         this.name = member.getName();
         this.salary = member.getSalary();
         this.rank = member.getRank();
-        this.address = member.getAddress().transDTO();
+        this.address = member.getAddress().createDTO();
         this.status = member.getStatus();
         this.teamId = member.getTeam().getId();
         this.teamName = member.getTeam().getName();

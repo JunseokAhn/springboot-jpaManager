@@ -53,7 +53,7 @@ public class TeamController {
     public String teamManage(@PathVariable("teamId") Long teamId, Model model){
 
         Team team = teamService.findOne(teamId);
-        TeamDTO teamDTO = teamService.transDTO(team);
+        TeamDTO teamDTO = teamService.createDTO(team);
         model.addAttribute("teamDTO", teamDTO);
 
         return "team/teamManage";

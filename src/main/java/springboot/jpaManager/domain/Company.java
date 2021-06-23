@@ -11,8 +11,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import static springboot.jpaManager.api.CompanyApiController.*;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,6 +46,6 @@ public class Company {
     public void update(CompanyDTO.UpdateAll companyDTO) {
 
         this.name = companyDTO.getName();
-        this.address = companyDTO.getAddress().transEntity();
+        this.address = companyDTO.getAddress().createEntity();
     }
 }

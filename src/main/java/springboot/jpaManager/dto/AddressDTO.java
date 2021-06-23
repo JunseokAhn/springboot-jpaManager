@@ -17,7 +17,7 @@ public class AddressDTO {
     @NotEmpty
     private String zipcode;
 
-    public Address transEntity() {
+    public Address createEntity() {
 
         return Address.createAddress(city, street, zipcode);
     }

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
-import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
@@ -25,7 +24,7 @@ public class TeamService {
 
     @Transactional
     public Long saveTeam(TeamDTO teamDTO) {
-        Team team = transEntity(teamDTO);
+        Team team = createEntity(teamDTO);
         return teamRepository.save(team);
     }
 
@@ -63,7 +62,7 @@ public class TeamService {
         teamRepository.flush();
     }
 
-    public Team transEntity(TeamDTO teamDTO) {
+    public Team createEntity(TeamDTO teamDTO) {
 
         String name = teamDTO.getName();
         String task = teamDTO.getTask();
@@ -82,7 +81,7 @@ public class TeamService {
         return teamDTOList;
     }
 
-    public TeamDTO transDTO(Team team) {
+    public TeamDTO createDTO(Team team) {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setId(team.getId());
         teamDTO.setName(team.getName());
