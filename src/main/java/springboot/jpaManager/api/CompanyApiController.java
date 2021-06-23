@@ -3,6 +3,7 @@ package springboot.jpaManager.api;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.AddressDTO;
@@ -12,6 +13,7 @@ import springboot.jpaManager.service.CompanyService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/company")
@@ -19,17 +21,13 @@ import java.util.List;
 public class CompanyApiController {
 
     private final CompanyService companyService;
+    private final ModelMapper modelMapper;
 
     @PostMapping("create")
     public CompanyResponse createCompany(@RequestBody @Valid CompanyRequest request) {
 
-        Company company = Company.builder()
-                .name(request.getName())
-                .address(request.getAddress().createEntity())
-                .build();
-
-        CompanyDTO companyDTO = CompanyDTO.createDTO(company);
-        Long id = companyService.saveCompany(companyDTO);
+        CompanyDTO company = modelMapper.map(request, CompanyDTO.class);
+        Long id = companyService.saveCompany(company);
         return new CompanyResponse(id);
     }
 
@@ -38,7 +36,7 @@ public class CompanyApiController {
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdateCompanyRequest request) {
 
-        CompanyDTO.UpdateAll companyDTO = CompanyDTO.UpdateAll.createDTO(id, request);
+        CompanyDTO.UpdateAll companyDTO = modelMapper.map(request, CompanyDTO.UpdateAll.class);
         companyService.updateCompany(companyDTO);
         Company updated = companyService.findOne(id);
 
@@ -48,7 +46,10 @@ public class CompanyApiController {
     @GetMapping("list")
     public CompanyListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = CompanyDTO.transDTOList(companyList);
+        List<CompanyDTO> companyDTOList = companyList.stream()
+                .map(CompanyDTO::new)
+                .collect(Collectors.toList());
+
         return new CompanyListResponse(companyDTOList.size(), companyDTOList);
     }
 

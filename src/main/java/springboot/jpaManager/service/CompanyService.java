@@ -1,6 +1,8 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
@@ -20,10 +22,11 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
-        Company company = companyDTO.createEntity(companyDTO);
+        Company company = modelMapper.map(companyDTO, Company.class);
         return companyRepository.save(company);
     }
 
@@ -35,6 +38,7 @@ public class CompanyService {
 
     @Transactional
     public void deleteCompany(Long companyId) {
+
         Company company = companyRepository.findOne(companyId);
         companyRepository.delete(company);
         List<Team> teamList = company.getTeamList();
@@ -57,6 +61,7 @@ public class CompanyService {
     public void flush() {
         companyRepository.flush();
     }
+
 
 
 
