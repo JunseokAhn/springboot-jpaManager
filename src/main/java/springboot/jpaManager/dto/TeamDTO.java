@@ -14,4 +14,22 @@ public class TeamDTO {
     private String task;
     private String companyName;
     private int memberCount;
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateAll {
+
+        private Long id;
+        private Long companyId;
+        private String name;
+        private String task;
+        private String companyName;
+        private int memberCount;
+
+
+    }
 }
+
+

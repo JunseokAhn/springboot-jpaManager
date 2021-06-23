@@ -42,7 +42,7 @@ public class CompanyController {
     @GetMapping("edit/{companyId}")
     public String companyEdit(@PathVariable("companyId") Long companyId, Model model) {
         Company company = companyService.findOne(companyId);
-        CompanyDTO companyDTO = companyService.transDTO(company);
+        CompanyDTO companyDTO = CompanyDTO.transDTO(company);
         model.addAttribute("company", companyDTO);
         return "company/edit";
     }

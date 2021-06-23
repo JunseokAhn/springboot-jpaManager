@@ -3,6 +3,7 @@ package springboot.jpaManager.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.api.CompanyApiController;
 import springboot.jpaManager.domain.Company;
 
 @Data
@@ -26,9 +27,18 @@ public class CompanyDTO {
         this.address = address;
     }
 
+    public static CompanyDTO transDTO(Company company) {
+
+        return CompanyDTO.builder()
+                .id(company.getId())
+                .name(company.getName())
+                .address(company.getAddress().transDTO())
+                .build();
+    }
+
     @Data
     @NoArgsConstructor
-    public static class UpdateAll{
+    public static class UpdateAll {
         private Long id;
         private String name;
         private AddressDTO address;
@@ -39,6 +49,16 @@ public class CompanyDTO {
             this.name = name;
             this.address = address;
         }
+
+        public static UpdateAll transDTO(Long id, CompanyApiController.UpdateCompanyRequest request) {
+
+            return CompanyDTO.UpdateAll.builder()
+                    .id(id)
+                    .name(request.getName())
+                    .address(request.getAddress())
+                    .build();
+        }
+
     }
 
 }

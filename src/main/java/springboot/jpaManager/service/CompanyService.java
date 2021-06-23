@@ -72,23 +72,7 @@ public class CompanyService {
                 .build();
     }
 
-    public static CompanyDTO transDTO(Company company) {
 
-        return CompanyDTO.builder()
-                .id(company.getId())
-                .name(company.getName())
-                .address(company.getAddress().transDTO())
-                .build();
-    }
-
-    public static CompanyDTO.UpdateAll transDTO(Long id, UpdateCompanyRequest updateCompanyRequest) {
-
-        return CompanyDTO.UpdateAll.builder()
-                .id(id)
-                .name(updateCompanyRequest.getName())
-                .address(updateCompanyRequest.getAddress())
-                .build();
-    }
 
     public static List<CompanyDTO> transDTOList(List<Company> companyList) {
 
