@@ -1,12 +1,10 @@
 package springboot.jpaManager.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import springboot.jpaManager.domain.Company;
 
 @Data
-@Builder
 @NoArgsConstructor
 public class CompanyDTO {
 
@@ -21,7 +19,6 @@ public class CompanyDTO {
     }
 
     @Data
-    @Builder
     @NoArgsConstructor
     public static class UpdateAll {
         private Long id;

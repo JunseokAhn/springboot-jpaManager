@@ -17,6 +17,7 @@ import springboot.jpaManager.service.MemberService;
 import springboot.jpaManager.service.TeamService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("member")
@@ -33,8 +34,10 @@ public class MemberController {
         List<Company> companyList = companyService.findAll();
         List<Team> teamList = teamService.findAll();
 
-        List<CompanyDTO> companyDTOList = companyService.transDTOList(companyList);
-        List<TeamDTO> teamDTOList = teamService.transDTOList(teamList);
+        List<CompanyDTO> companyDTOList = companyList.stream()
+                .map(CompanyDTO::new).collect(Collectors.toList());
+        List<TeamDTO> teamDTOList = teamList.stream()
+                .map(TeamDTO::new).collect(Collectors.toList());
 
         model.addAttribute("companyList", companyDTOList);
         model.addAttribute("teamList", teamDTOList);

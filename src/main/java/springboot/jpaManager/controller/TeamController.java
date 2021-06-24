@@ -1,6 +1,7 @@
 package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import springboot.jpaManager.service.CompanyService;
 import springboot.jpaManager.service.TeamService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("team")
@@ -23,11 +25,14 @@ public class TeamController {
 
     private final CompanyService companyService;
     private final TeamService teamService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("register")
     public String teamRegister(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyService.transDTOList(companyList);
+        List<CompanyDTO> companyDTOList = companyList.stream()
+                .map(CompanyDTO::new).collect(Collectors.toList());
+
         model.addAttribute("form", new TeamDTO());
         model.addAttribute("companyList", companyDTOList);
 
@@ -44,7 +49,9 @@ public class TeamController {
     @GetMapping("list")
     public String teamList(Model model) {
         List<Team> teamList = teamService.findAll();
-        List<TeamDTO> teamDTOList = teamService.transDTOList(teamList);
+        List<TeamDTO> teamDTOList = teamList.stream()
+                .map(TeamDTO::new).collect(Collectors.toList());
+
         model.addAttribute("teamDTOList", teamDTOList);
         return "team/list";
     }
@@ -53,20 +60,18 @@ public class TeamController {
     public String teamManage(@PathVariable("teamId") Long teamId, Model model){
 
         Team team = teamService.findOne(teamId);
-        TeamDTO teamDTO = teamService.createDTO(team);
+        TeamDTO.UpdateAll teamDTO = modelMapper.map(team, TeamDTO.UpdateAll.class);
         model.addAttribute("teamDTO", teamDTO);
 
         return "team/teamManage";
     }
 
     @PostMapping("teamManage")
-    public String teamManage2(TeamDTO teamDTO){
+    public String teamManage2(TeamDTO.UpdateAll teamDTO){
 
         teamService.updateTeam(teamDTO);
         return "redirect:/team/list";
     }
-
-
 
     @GetMapping("memberManage/{teamId}")
     public String memberManage(@PathVariable("teamId") Long teamId, Model model){

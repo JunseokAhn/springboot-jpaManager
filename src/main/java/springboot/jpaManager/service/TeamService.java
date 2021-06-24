@@ -1,6 +1,7 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
@@ -21,19 +22,20 @@ public class TeamService {
     private final CompanyService companyService;
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public Long saveTeam(TeamDTO teamDTO) {
-        Team team = createEntity(teamDTO);
+        Team team = modelMapper.map(teamDTO, Team.class);
         return teamRepository.save(team);
     }
 
     @Transactional
-    public void updateTeam(TeamDTO teamDTO) {
+    public void updateTeam(TeamDTO.UpdateAll teamDTO) {
         Team origin = findOne(teamDTO.getId());
         Company company = companyService.findOne(teamDTO.getCompanyId());
 
-        origin.updateTeam(teamDTO,company);
+        origin.updateAll(teamDTO,company);
     }
 
     @Transactional
@@ -62,37 +64,4 @@ public class TeamService {
         teamRepository.flush();
     }
 
-    public Team createEntity(TeamDTO teamDTO) {
-
-        String name = teamDTO.getName();
-        String task = teamDTO.getTask();
-        Long companyId = teamDTO.getCompanyId();
-        Company company = companyService.findOne(companyId);
-
-        return Team.createTeam(name, task, company);
-    }
-
-    public List<TeamDTO> transDTOList(List<Team> teamList){
-
-        List<TeamDTO> teamDTOList = teamList.stream().map(m -> new TeamDTO
-                (m.getId(), m.getCompany().getId(), m.getName(), m.getTask(), m.getCompany().getName(), m.getMemberCount())
-        ).collect(Collectors.toList());
-
-        return teamDTOList;
-    }
-
-    public TeamDTO createDTO(Team team) {
-        TeamDTO teamDTO = new TeamDTO();
-        teamDTO.setId(team.getId());
-        teamDTO.setName(team.getName());
-        teamDTO.setTask(team.getTask());
-        Long companyId = team.getCompany().getId();
-        teamDTO.setMemberCount(team.getMemberCount());
-
-        teamDTO.setCompanyId(companyId);
-        Company company = companyService.findOne(companyId);
-        teamDTO.setCompanyName(company.getName());
-
-        return teamDTO;
-    }
 }

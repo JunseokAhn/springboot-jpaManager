@@ -43,7 +43,7 @@ public class Company {
         this.teamList.remove(team);
     }
 
-    public void update(CompanyDTO.UpdateAll companyDTO) {
+    public void updateAll(CompanyDTO.UpdateAll companyDTO) {
 
         this.name = companyDTO.getName();
         this.address = companyDTO.getAddress().createEntity();

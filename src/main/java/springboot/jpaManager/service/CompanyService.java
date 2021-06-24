@@ -2,7 +2,6 @@ package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
@@ -13,7 +12,6 @@ import springboot.jpaManager.repository.CompanyRepository;
 import springboot.jpaManager.repository.MemberRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,7 +31,7 @@ public class CompanyService {
     @Transactional
     public void updateCompany(CompanyDTO.UpdateAll companyDTO) {
         Company origin = companyRepository.findOne(companyDTO.getId());
-        origin.update(companyDTO);
+        origin.updateAll(companyDTO);
     }
 
     @Transactional

@@ -56,7 +56,7 @@ public class Team {
         }
     }
 
-    public void updateTeam(TeamDTO teamDTO, Company company) {
+    public void updateAll(TeamDTO.UpdateAll teamDTO, Company company) {
         this.id = teamDTO.getId();
         this.name = teamDTO.getName();
         this.task = teamDTO.getTask();
