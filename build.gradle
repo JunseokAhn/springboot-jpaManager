@@ -36,6 +36,8 @@ dependencies {
 
     //쿼리 파라미터 로그 남기기 >> 개발단계에선 편하지만, 성능저하 이슈가있으므로 배포할때는 꼭 성능테스트를 해볼 것
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
-    compileOnly 'org.modelmapper:modelmapper:2.4.2'
+    implementation group: 'net.jodah', name: 'typetools', version: '0.6.3'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
+
 
 }
