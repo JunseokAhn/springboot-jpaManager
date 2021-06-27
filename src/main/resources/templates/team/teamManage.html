@@ -4,29 +4,32 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <form th:action="@{/team/teamManage}" th:object="${form}" method="post">
+    <form th:action="@{/team/teamManage}" th:object="${teamDTO}" method="post">
         <div class="form-group">
-            <label th:for="companyName">소속사</label>
-            <div th:text="${teamDTO.companyName}" class="form-control"/>
+            <label th:for="company">소속사</label>
+            <select th:field="*{companyId}">
+                <option th:value="*{companyId}"
+                        th:text="*{companyName}"
+                        selected disabled>
+                </option>
+                <option th:each="company : ${companyList}"
+                        th:value="${company.id}"
+                        th:text="${company.name}">
+                </option>
+            </select>
         </div>
         <div class="form-group">
             <label th:for="name">팀 이름</label>
-            <input type="text" th:field="${teamDTO.name}" class="form-control"
-                   placeholder="${teamDTO.name}">
+            <input type="text" th:field="*{name}" class="form-control"
+                   placeholder="*{name}">
         </div>
         <div class="form-group">
             <label th:for="task">업무명</label>
-            <input type="text" th:field="${teamDTO.task}" class="form-control"
-                   placeholder="${teamDTO.task}">
+            <input type="text" th:field="*{task}" class="form-control"
+                   placeholder="*{task}">
         </div>
         <div class="form-group">
-            <input type="hidden" th:field="${teamDTO.id}" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="hidden" th:field="${teamDTO.companyId}" class="form-control">
-        </div>
-        <div class="form-group">
-            <input type="hidden" th:field="${teamDTO.memberCount}" class="form-control">
+            <input type="hidden" th:field="*{id}" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

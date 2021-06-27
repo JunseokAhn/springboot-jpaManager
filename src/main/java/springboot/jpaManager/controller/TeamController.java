@@ -49,32 +49,42 @@ public class TeamController {
     @GetMapping("list")
     public String teamList(Model model) {
         List<Team> teamList = teamService.findAll();
-        List<TeamDTO> teamDTOList = teamList.stream()
-                .map(TeamDTO::new).collect(Collectors.toList());
+        List<TeamDTO.List> teamDTOList = teamList.stream()
+                .map(TeamDTO.List::new).collect(Collectors.toList());
 
         model.addAttribute("teamDTOList", teamDTOList);
         return "team/list";
     }
 
     @GetMapping("teamManage/{teamId}")
-    public String teamManage(@PathVariable("teamId") Long teamId, Model model){
+    public String teamManage(@PathVariable("teamId") Long teamId, Model model) {
 
         Team team = teamService.findOne(teamId);
-        TeamDTO.UpdateAll teamDTO = modelMapper.map(team, TeamDTO.UpdateAll.class);
+
+        modelMapper.typeMap(Team.class, TeamDTO.Update.class).addMappings(mapper -> {
+            mapper.map(Team -> Team.getCompany().getId(), TeamDTO.Update::setCompanyId);
+            mapper.map(Team -> Team.getCompany().getName(), TeamDTO.Update::setCompanyName);
+        });
+
+        TeamDTO.Update teamDTO = modelMapper.map(team, TeamDTO.Update.class);
+
+        List<Company> companyList = companyService.findAll();
+
         model.addAttribute("teamDTO", teamDTO);
+        model.addAttribute("companyList", companyList);
 
         return "team/teamManage";
     }
 
     @PostMapping("teamManage")
-    public String teamManage2(TeamDTO.UpdateAll teamDTO){
+    public String teamManage2(TeamDTO.Update teamDTO) {
 
         teamService.updateTeam(teamDTO);
         return "redirect:/team/list";
     }
 
     @GetMapping("memberManage/{teamId}")
-    public String memberManage(@PathVariable("teamId") Long teamId, Model model){
+    public String memberManage(@PathVariable("teamId") Long teamId, Model model) {
         //findMemberAll using teamId
         //need Member register
         return "team/memberManage";

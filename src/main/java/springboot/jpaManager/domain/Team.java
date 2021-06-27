@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.service.CompanyService;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,11 +29,11 @@ public class Team {
     @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
     private List<Member> memberList = new ArrayList<>();
 
-    public static final Team createTeam(String name, String task, Company company) {
+    public static final Team createTeam(TeamDTO teamDTO, Company company) {
         Team team = new Team();
 
-        team.name = name;
-        team.task = task;
+        team.name = teamDTO.getName();
+        team.task = teamDTO.getTask();
         team.company = company;
         company.addTeam(team);
 
@@ -56,16 +55,21 @@ public class Team {
         }
     }
 
-    public void updateAll(TeamDTO.UpdateAll teamDTO, Company company) {
+    public void update(TeamDTO.Update teamDTO, Company company) {
+
         this.id = teamDTO.getId();
-        this.name = teamDTO.getName();
-        this.task = teamDTO.getTask();
-        this.company.deleteTeam(this);
-        this.company = company;
-        this.company.addTeam(this);
+        if (teamDTO.getName() != null)
+            this.name = teamDTO.getName();
+        if (teamDTO.getTask() != null)
+            this.task = teamDTO.getTask();
+        if (company.getId() != null) {
+            this.company.deleteTeam(this);
+            this.company = company;
+            this.company.addTeam(this);
+        }
     }
 
-    public int getMemberCount(){
+    public int getMemberCount() {
         return memberList.size();
     }
 }

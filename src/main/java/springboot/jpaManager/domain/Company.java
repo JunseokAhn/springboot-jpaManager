@@ -1,7 +1,6 @@
 package springboot.jpaManager.domain;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -27,13 +26,6 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Team> teamList = new ArrayList<>();
-
-    @Builder
-    public Company(Long id, String name, Address address){
-        this.id = id;
-        this.name = name;
-        this.address = address;
-    }
 
     public void addTeam(Team team) {
         this.teamList.add(team);

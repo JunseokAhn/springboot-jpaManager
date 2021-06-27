@@ -1,7 +1,6 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Company;
@@ -12,7 +11,6 @@ import springboot.jpaManager.repository.MemberRepository;
 import springboot.jpaManager.repository.TeamRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,20 +20,21 @@ public class TeamService {
     private final CompanyService companyService;
     private final TeamRepository teamRepository;
     private final MemberRepository memberRepository;
-    private final ModelMapper modelMapper;
 
     @Transactional
     public Long saveTeam(TeamDTO teamDTO) {
-        Team team = modelMapper.map(teamDTO, Team.class);
+        Company company = companyService.findOne(teamDTO.getCompanyId());
+        Team team = Team.createTeam(teamDTO, company);
+
         return teamRepository.save(team);
     }
 
     @Transactional
-    public void updateTeam(TeamDTO.UpdateAll teamDTO) {
+    public void updateTeam(TeamDTO.Update teamDTO) {
         Team origin = findOne(teamDTO.getId());
         Company company = companyService.findOne(teamDTO.getCompanyId());
 
-        origin.updateAll(teamDTO,company);
+        origin.update(teamDTO,company);
     }
 
     @Transactional
