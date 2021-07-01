@@ -1,6 +1,7 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.Address;
@@ -8,6 +9,7 @@ import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.MemberStatus;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.MemberDTO;
+import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.MemberRepository;
 
 import java.util.List;
@@ -20,11 +22,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TeamService teamService;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public Long saveMember(MemberDTO memberDTO) {
 
-        Member member = createEntity(memberDTO);
+        Team team = teamService.findOne(memberDTO.getTeamId());
+        Member member = Member.createMember(memberDTO, team);
+
         return memberRepository.save(member);
     }
 
@@ -40,7 +45,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    private Member createEntity(MemberDTO memberDTO) {
+/*    private Member createEntity(MemberDTO memberDTO) {
 
         int salary = 3000000;
         if (memberDTO.getSalary() != null)
@@ -55,11 +60,11 @@ public class MemberService {
         String name = memberDTO.getName();
         Address address = memberDTO.getAddress().createEntity();
 
-        Team team = teamService.findOne(memberDTO.getTeamId());
+        Team team = teamService.findOne(memberDTO.getTeam().getId());
         Member member = Member.createMember(name, salary, rank, address, status, team);
 
         return member;
-    }
+    }*/
 
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
@@ -75,14 +80,6 @@ public class MemberService {
 
     public void flush() {
         memberRepository.flush();
-    }
-
-    public List<MemberDTO> transDTOList(List<Member> memberList) {
-
-        List<MemberDTO> memberDTOList = memberList.stream()
-                .map(MemberDTO::new).collect(Collectors.toList());
-
-        return memberDTOList;
     }
 
 }

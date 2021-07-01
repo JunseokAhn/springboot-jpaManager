@@ -3,6 +3,7 @@ package springboot.jpaManager.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springboot.jpaManager.dto.MemberDTO;
 
 import javax.persistence.*;
 
@@ -32,14 +33,13 @@ public class Member {
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    public static final Member createMember(String name, int salary, String rank,
-                                            Address address, MemberStatus status, Team team) {
+    public static Member createMember(MemberDTO memberDTO, Team team) {
         Member member = new Member();
-        member.name = name;
-        member.salary = salary;
-        member.rank = rank;
-        member.address = address;
-        member.status = status;
+        member.name = memberDTO.getName();
+        member.salary = memberDTO.getSalary();
+        member.rank = member.getRank();
+        member.address = memberDTO.getAddress().createEntity();
+        member.status = memberDTO.getStatus();
         member.team = team;
         team.addMember(member);
 

@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
-import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
-import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.service.CompanyService;
 import springboot.jpaManager.service.MemberService;
 import springboot.jpaManager.service.TeamService;
@@ -29,38 +27,34 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("register")
-    public String memberRegister(Model model){
+    public String memberRegister(Model model) {
 
         List<Company> companyList = companyService.findAll();
-        List<Team> teamList = teamService.findAll();
 
-        List<CompanyDTO> companyDTOList = companyList.stream()
-                .map(CompanyDTO::new).collect(Collectors.toList());
-        List<TeamDTO> teamDTOList = teamList.stream()
-                .map(TeamDTO::new).collect(Collectors.toList());
+        List<CompanyDTO.TeamList> companyDTOTeamList = companyList.stream()
+                .map(CompanyDTO.TeamList::new).collect(Collectors.toList());
 
-        model.addAttribute("companyList", companyDTOList);
-        model.addAttribute("teamList", teamDTOList);
+        model.addAttribute("companyList", companyDTOTeamList);
         model.addAttribute("form", new MemberDTO());
 
         return "member/register";
     }
 
     @PostMapping("register")
-    public String memberRegister2(MemberDTO memberDTO){
-
+    public String memberRegister2(MemberDTO memberDTO) {
+        System.out.println(memberDTO);
         memberService.saveMember(memberDTO);
 
         return "redirect:/member/list";
     }
 
     @GetMapping("list")
-    public String memberList(Model model){
+    public String memberList(Model model) {
 
         List<Member> memberList = memberService.findAll();
-        List<MemberDTO> memberDTOList = memberService.transDTOList(memberList);
+        List<MemberDTO> memberDTOList = memberList.stream()
+                .map(MemberDTO::new).collect(Collectors.toList());
         model.addAttribute("memberList", memberDTOList);
-
 
         return "member/list";
     }

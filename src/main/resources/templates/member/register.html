@@ -5,14 +5,14 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <form th:action="@{register}" th:object="${form}" method="post">
-        <div class="form-group">
+       <div class="form-group">
             <label th:for="company">소속사</label>
-            <select th:field="*{companyId}">
+            <select>
                 <option value="" selected disabled>
                     소속사를 선택하세요
                 </option>
                 <option th:each="company : ${companyList}"
-                        th:value="${company.id}"
+                        th:value="${companyStat.index}"
                         th:text="${company.name}">
                 </option>
             </select>
@@ -24,10 +24,12 @@
                 <option value="" selected disabled>
                     팀을 선택하세요
                 </option>
-                <option th:each="team : ${teamList}"
-                        th:value="${team.id}"
-                        th:text="${team.name}">
-                </option>
+            <!-- need to fix parsing-->
+            <option th:each="team : ${companyList[0].teamList}"
+                th:value="${team.id}"
+                th:text="${team.name}">
+            </option>
+
             </select>
         </div>
         <div class="form-group">

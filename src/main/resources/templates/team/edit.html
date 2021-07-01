@@ -7,26 +7,21 @@
     <form th:action="@{/team/edit}" th:object="${form}" method="post">
         <div class="form-group">
             <label th:for="name">회사명</label>
-            <input type="text" th:field="${teamDTO.name}" class="form-control"
-                   placeholder="이름을 입력하세요">
+            <input type="text" th:field="*{company.name}" class="form-control"
+                   placeholder="">
         </div>
         <div class="form-group">
             <label th:for="city">팀이름</label>
-            <input type="text" th:field="${teamDTO.city}" class="form-control"
-                   placeholder="주소를 입력하세요">
+            <input type="text" th:field="*{name}" class="form-control"
+                   placeholder="이름을 입력하세요">
         </div>
         <div class="form-group">
             <label th:for="street">임무</label>
-            <input type="text" th:field="${teamDTO.street}" class="form-control"
-                   placeholder="거리를 입력하세요">
+            <input type="text" th:field="*{task}" class="form-control"
+                   placeholder="임무를 입력하세요">
         </div>
         <div class="form-group">
-            <label th:for="zipcode">멤버</label>
-            <input type="text" th:field="${teamDTO.zipcode}" class="form-control"
-                   placeholder="우편번호를 입력하세요">
-        </div>
-        <div class="form-group">
-            <input type="hidden" th:field="${teamDTO.id}" class="form-control">
+            <input type="hidden" th:field="*{id}" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

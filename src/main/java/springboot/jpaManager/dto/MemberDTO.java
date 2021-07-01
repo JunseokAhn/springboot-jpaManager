@@ -1,13 +1,11 @@
 package springboot.jpaManager.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.MemberStatus;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class MemberDTO {
 
@@ -18,9 +16,6 @@ public class MemberDTO {
     AddressDTO address;
     MemberStatus status;
     Long teamId;
-    String teamName;
-    Long companyId;
-    String companyName;
 
     public MemberDTO(Member member) {
         this.id = member.getId();
@@ -30,8 +25,5 @@ public class MemberDTO {
         this.address = member.getAddress().createDTO();
         this.status = member.getStatus();
         this.teamId = member.getTeam().getId();
-        this.teamName = member.getTeam().getName();
-        this.companyId = member.getTeam().getCompany().getId();
-        this.companyName = member.getTeam().getCompany().getName();
     }
 }
