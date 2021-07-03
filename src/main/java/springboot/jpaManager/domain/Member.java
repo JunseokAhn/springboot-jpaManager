@@ -1,8 +1,6 @@
 package springboot.jpaManager.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import springboot.jpaManager.dto.MemberDTO;
 
 import javax.persistence.*;
@@ -36,10 +34,17 @@ public class Member {
     public static Member createMember(MemberDTO memberDTO, Team team) {
         Member member = new Member();
         member.name = memberDTO.getName();
-        member.salary = memberDTO.getSalary();
-        member.rank = member.getRank();
+
+        member.salary = 3000000;
+        if (memberDTO.getSalary() != null)
+            member.salary = memberDTO.getSalary();
+        member.rank = "신입";
+        if (memberDTO.getRank() != null)
+            member.rank = member.getRank();
+        member.status = MemberStatus.WAIT;
+        if (memberDTO.getStatus() != null)
+            member.status = memberDTO.getStatus();
         member.address = memberDTO.getAddress().createEntity();
-        member.status = memberDTO.getStatus();
         member.team = team;
         team.addMember(member);
 

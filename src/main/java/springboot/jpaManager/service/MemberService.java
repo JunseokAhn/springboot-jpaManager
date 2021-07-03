@@ -1,19 +1,14 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.domain.Address;
 import springboot.jpaManager.domain.Member;
-import springboot.jpaManager.domain.MemberStatus;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.MemberDTO;
-import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.MemberRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,7 +17,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TeamService teamService;
-    private final ModelMapper modelMapper;
 
     @Transactional
     public Long saveMember(MemberDTO memberDTO) {
@@ -44,27 +38,6 @@ public class MemberService {
         Member member = memberRepository.findOne(memberId);
         memberRepository.delete(member);
     }
-
-/*    private Member createEntity(MemberDTO memberDTO) {
-
-        int salary = 3000000;
-        if (memberDTO.getSalary() != null)
-            salary = memberDTO.getSalary();
-
-        String rank = "신입";
-        if (memberDTO.getRank() == "")
-            rank = memberDTO.getRank();
-
-        MemberStatus status = MemberStatus.WAIT;
-
-        String name = memberDTO.getName();
-        Address address = memberDTO.getAddress().createEntity();
-
-        Team team = teamService.findOne(memberDTO.getTeam().getId());
-        Member member = Member.createMember(name, salary, rank, address, status, team);
-
-        return member;
-    }*/
 
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
