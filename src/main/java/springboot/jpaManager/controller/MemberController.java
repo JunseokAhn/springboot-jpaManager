@@ -1,6 +1,7 @@
 package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,6 @@ import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.service.CompanyService;
 import springboot.jpaManager.service.MemberService;
-import springboot.jpaManager.service.TeamService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,18 +23,19 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final CompanyService companyService;
-    private final TeamService teamService;
     private final MemberService memberService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("register")
     public String memberRegister(Model model) {
 
         List<Company> companyList = companyService.findAll();
 
-        List<CompanyDTO.TeamList> companyDTOTeamList = companyList.stream()
-                .map(CompanyDTO.TeamList::new).collect(Collectors.toList());
+        List<CompanyDTO.TeamList> companyList2 = companyList.stream().map(
+                company -> modelMapper.map( company, CompanyDTO.TeamList.class)
+        ).collect(Collectors.toList());
 
-        model.addAttribute("companyList", companyDTOTeamList);
+        model.addAttribute("companyList", companyList2);
         model.addAttribute("form", new MemberDTO());
 
         return "member/register";
@@ -42,7 +43,6 @@ public class MemberController {
 
     @PostMapping("register")
     public String memberRegister2(MemberDTO memberDTO) {
-        System.out.println(memberDTO);
         memberService.saveMember(memberDTO);
 
         return "redirect:/member/list";
@@ -52,10 +52,19 @@ public class MemberController {
     public String memberList(Model model) {
 
         List<Member> memberList = memberService.findAll();
-        List<MemberDTO> memberDTOList = memberList.stream()
-                .map(MemberDTO::new).collect(Collectors.toList());
+
+        modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings( mapper -> {
+            mapper.map( Member -> Member.getTeam().getName(), MemberDTO.List::setTeamName);
+            mapper.map( Member -> Member.getTeam().getCompany().getName(), MemberDTO.List::setCompanyName);
+        });
+
+        List<MemberDTO.List> memberDTOList = memberList.stream().map(
+                member -> modelMapper.map( member, MemberDTO.List.class)
+        ).collect(Collectors.toList());
+
         model.addAttribute("memberList", memberDTOList);
 
         return "member/list";
     }
+
 }

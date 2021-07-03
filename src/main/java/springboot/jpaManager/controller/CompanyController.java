@@ -1,6 +1,7 @@
 package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import springboot.jpaManager.service.CompanyService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequestMapping("company")
 @RequiredArgsConstructor
@@ -37,10 +39,11 @@ public class CompanyController {
     @GetMapping("list")
     public String companyList(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyList.stream()
-                .map(CompanyDTO::new).collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = companyList.stream().map(
+                company -> modelMapper.map(company, CompanyDTO.class)
+        ).collect(Collectors.toList());
 
-        model.addAttribute("company_list", companyDTOList);
+        model.addAttribute("company_list", companyList2);
         return "company/list";
     }
 

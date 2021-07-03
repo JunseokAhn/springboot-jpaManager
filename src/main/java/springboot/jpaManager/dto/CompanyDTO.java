@@ -13,12 +13,6 @@ public class CompanyDTO {
     private String name;
     private AddressDTO address;
 
-    public CompanyDTO(Company company) {
-        this.id = company.getId();
-        this.name = company.getName();
-        this.address = company.getAddress().createDTO();
-    }
-
     @Data
     @NoArgsConstructor
     public static class UpdateAll {
@@ -36,11 +30,6 @@ public class CompanyDTO {
         private String name;
         private java.util.List<Team> teamList;
 
-        public TeamList(Company company) {
-            this.id = company.getId();
-            this.name = company.getName();
-            this.teamList = company.getTeamList();
-        }
     }
 
 }

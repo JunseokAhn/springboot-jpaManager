@@ -30,11 +30,12 @@ public class TeamController {
     @GetMapping("register")
     public String teamRegister(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyList.stream()
-                .map(CompanyDTO::new).collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = companyList.stream().map(
+                company -> modelMapper.map(company, CompanyDTO.class)
+        ).collect(Collectors.toList());
 
         model.addAttribute("form", new TeamDTO());
-        model.addAttribute("companyList", companyDTOList);
+        model.addAttribute("companyList", companyList2);
 
         return "team/register";
     }
@@ -49,10 +50,11 @@ public class TeamController {
     @GetMapping("list")
     public String teamList(Model model) {
         List<Team> teamList = teamService.findAll();
-        List<TeamDTO.List> teamDTOList = teamList.stream()
-                .map(TeamDTO.List::new).collect(Collectors.toList());
+        List<TeamDTO.List> teamList2 = teamList.stream().map(
+                team -> modelMapper.map(team, TeamDTO.List.class)
+        ).collect(Collectors.toList());
 
-        model.addAttribute("teamDTOList", teamDTOList);
+        model.addAttribute("teamDTOList", teamList2);
         return "team/list";
     }
 

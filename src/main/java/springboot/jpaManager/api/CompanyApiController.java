@@ -46,11 +46,11 @@ public class CompanyApiController {
     @GetMapping("list")
     public CompanyListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyDTOList = companyList.stream()
-                .map(CompanyDTO::new)
-                .collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = companyList.stream().map(
+                company -> modelMapper.map(company, CompanyDTO.class)
+        ).collect(Collectors.toList());
 
-        return new CompanyListResponse(companyDTOList.size(), companyDTOList);
+        return new CompanyListResponse(companyList2.size(), companyList2);
     }
 
     @Data
