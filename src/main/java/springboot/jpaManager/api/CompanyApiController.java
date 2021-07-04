@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -13,7 +14,6 @@ import springboot.jpaManager.service.CompanyService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/company")
@@ -22,6 +22,7 @@ public class CompanyApiController {
 
     private final CompanyService companyService;
     private final ModelMapper modelMapper;
+    private final Method method;
 
     @PostMapping("create")
     public CompanyResponse createCompany(@RequestBody @Valid CompanyRequest request) {
@@ -46,9 +47,7 @@ public class CompanyApiController {
     @GetMapping("list")
     public CompanyListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = companyList.stream().map(
-                company -> modelMapper.map(company, CompanyDTO.class)
-        ).collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
 
         return new CompanyListResponse(companyList2.size(), companyList2);
     }

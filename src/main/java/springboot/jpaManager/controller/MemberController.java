@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -25,15 +26,14 @@ public class MemberController {
     private final CompanyService companyService;
     private final MemberService memberService;
     private final ModelMapper modelMapper;
+    private final Method method;
 
     @GetMapping("register")
     public String memberRegister(Model model) {
 
         List<Company> companyList = companyService.findAll();
 
-        List<CompanyDTO.TeamList> companyList2 = companyList.stream().map(
-                company -> modelMapper.map( company, CompanyDTO.TeamList.class)
-        ).collect(Collectors.toList());
+        List<CompanyDTO.TeamList> companyList2 = method.mapList(companyList, CompanyDTO.TeamList.class);
 
         model.addAttribute("companyList", companyList2);
         model.addAttribute("form", new MemberDTO());
@@ -53,14 +53,12 @@ public class MemberController {
 
         List<Member> memberList = memberService.findAll();
 
-        modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings( mapper -> {
-            mapper.map( Member -> Member.getTeam().getName(), MemberDTO.List::setTeamName);
-            mapper.map( Member -> Member.getTeam().getCompany().getName(), MemberDTO.List::setCompanyName);
+        modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings(mapper -> {
+            mapper.map(Member -> Member.getTeam().getName(), MemberDTO.List::setTeamName);
+            mapper.map(Member -> Member.getTeam().getCompany().getName(), MemberDTO.List::setCompanyName);
         });
 
-        List<MemberDTO.List> memberDTOList = memberList.stream().map(
-                member -> modelMapper.map( member, MemberDTO.List.class)
-        ).collect(Collectors.toList());
+        List<MemberDTO.List> memberDTOList = method.mapList(memberList, MemberDTO.List.class);
 
         model.addAttribute("memberList", memberDTOList);
 

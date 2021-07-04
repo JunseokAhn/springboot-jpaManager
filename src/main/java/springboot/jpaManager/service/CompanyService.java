@@ -25,6 +25,7 @@ public class CompanyService {
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
         Company company = modelMapper.map(companyDTO, Company.class);
+
         return companyRepository.save(company);
     }
 
@@ -59,9 +60,6 @@ public class CompanyService {
     public void flush() {
         companyRepository.flush();
     }
-
-
-
 
 }
 

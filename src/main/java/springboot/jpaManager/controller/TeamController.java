@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -26,13 +27,12 @@ public class TeamController {
     private final CompanyService companyService;
     private final TeamService teamService;
     private final ModelMapper modelMapper;
+    private final Method method;
 
     @GetMapping("register")
     public String teamRegister(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = companyList.stream().map(
-                company -> modelMapper.map(company, CompanyDTO.class)
-        ).collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
 
         model.addAttribute("form", new TeamDTO());
         model.addAttribute("companyList", companyList2);
@@ -50,9 +50,7 @@ public class TeamController {
     @GetMapping("list")
     public String teamList(Model model) {
         List<Team> teamList = teamService.findAll();
-        List<TeamDTO.List> teamList2 = teamList.stream().map(
-                team -> modelMapper.map(team, TeamDTO.List.class)
-        ).collect(Collectors.toList());
+        List<TeamDTO.List> teamList2 = method.mapList(teamList, TeamDTO.List.class);
 
         model.addAttribute("teamDTOList", teamList2);
         return "team/list";

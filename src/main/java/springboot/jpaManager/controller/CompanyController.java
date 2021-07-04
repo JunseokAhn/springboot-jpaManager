@@ -6,12 +6,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.service.CompanyService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -21,6 +21,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final ModelMapper modelMapper;
+    private final Method method;
 
     @GetMapping("register")
     public String companyRegister(Model model) {
@@ -39,9 +40,7 @@ public class CompanyController {
     @GetMapping("list")
     public String companyList(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = companyList.stream().map(
-                company -> modelMapper.map(company, CompanyDTO.class)
-        ).collect(Collectors.toList());
+        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
 
         model.addAttribute("company_list", companyList2);
         return "company/list";

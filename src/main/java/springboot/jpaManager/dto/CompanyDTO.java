@@ -2,7 +2,6 @@ package springboot.jpaManager.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Team;
 
 @Data
