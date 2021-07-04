@@ -16,7 +16,6 @@ import springboot.jpaManager.service.CompanyService;
 import springboot.jpaManager.service.MemberService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("member")
