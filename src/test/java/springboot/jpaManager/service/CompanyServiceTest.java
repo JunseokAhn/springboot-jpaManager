@@ -2,12 +2,16 @@ package springboot.jpaManager.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.*;
+import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
+import springboot.jpaManager.dto.MemberDTO;
+import springboot.jpaManager.dto.TeamDTO;
 
 import static org.junit.Assert.*;
 
@@ -22,20 +26,22 @@ public class CompanyServiceTest {
     TeamService teamService;
     @Autowired
     MemberService memberService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Test
     public void saveCompany() throws Exception {
 
         //given
-        Company company = this.createCompany();
-        CompanyDTO companyDTO = companyService.transDTO(company);
-        Long companyId = companyService.saveCompany(companyDTO);
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
 
         //when
-        Company found = companyService.findOne(companyId);
+        Company company2 = companyService.findOne(companyId);
+        Company company3 = modelMapper.map(company, Company.class);
 
         //then
-        assertEquals(company, found);
+        assertEquals("생성된company와 저장된company는 같다", company3.getName(), company2.getName());
 
     }
 
@@ -43,71 +49,106 @@ public class CompanyServiceTest {
     public void updateCompany() throws Exception {
 
         //given
-        Company origin = this.createCompany();
-        CompanyDTO originDTO = companyService.transDTO(origin);
-        Long companyId = companyService.saveCompany(originDTO);
-        companyService.flush();
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
 
         //when
-        CompanyDTO companyDTO = this.createCompanyDTO();
-        companyService.updateCompany(companyDTO);
+        CompanyDTO.UpdateAll company2 = createCompanyDTOUpdateAll();
+        company2.setId(companyId);
+        companyService.updateCompany(company2);
 
         //then
-        Company fresh = companyService.findOne(companyId);
-        assertEquals(fresh.getName(), companyDTO.getName());
+        Company company3 = companyService.findOne(companyId);
+        assertEquals("업데이트된 company3의 내용은 업데이트dto와 같다", company3.getName(), company2.getName());
 
     }
+
 
     @Test
     public void deleteCompany() throws Exception {
 
         //given
-        Member member = createMember();
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
+
+        TeamDTO team = createTeamDTO(companyId);
+        Long teamId = teamService.saveTeam(team);
+
+        MemberDTO member = createMemberDTO(teamId);
         Long memberId = memberService.saveMember(member);
 
-        Long teamId = member.getTeam().getId();
-        Long companyId = member.getTeam().getCompany().getId();
         companyService.flush();
 
         //when
         companyService.deleteCompany(companyId);
 
         //then
-        Company company = companyService.findOne(companyId);
-        Team team = teamService.findOne(teamId);
-        Member found = memberService.findOne(memberId);
+        Company company2 = companyService.findOne(companyId);
+        Team team2 = teamService.findOne(teamId);
+        Member member2 = memberService.findOne(memberId);
 
-        assertNull("컴퍼니를 지웠기때문에 null이떠야함", company);
-        assertNull("캐스캐이딩으로 team도 널이 떠야함", team);
-        assertNull("포문으로 멤버를 지웠으므로 member도 널", found);
+        assertNull("컴퍼니를 지웠기때문에 null이떠야함", company2);
+        assertNull("캐스캐이딩으로 team도 널이 떠야함", team2);
+        assertNull("포문으로 멤버를 지웠으므로 member도 널", member2);
 
     }
 
     public Company createCompany() {
-        Address address = Address.createAddress("city", "street", "zipcode");
-        Company company = Company.createCompany("companyA", address);
+
+        return modelMapper.map(createCompanyDTO(), Company.class);
+    }
+
+    private CompanyDTO createCompanyDTO() {
+
+        CompanyDTO company = new CompanyDTO();
+        company.setName("name");
+        company.setAddress(createAddressDTO());
 
         return company;
     }
 
-    public CompanyDTO createCompanyDTO() {
-        Address address = Address.createAddress("city2", "street2", "zipcode2");
-        CompanyDTO companyDTO = new CompanyDTO();
-        companyDTO.setName("companyB");
-        companyDTO.setStreet("street2");
-        companyDTO.setZipcode("zipcode2");
 
-        return companyDTO;
+    private CompanyDTO.UpdateAll createCompanyDTOUpdateAll() {
+
+        CompanyDTO.UpdateAll company = new CompanyDTO.UpdateAll();
+        company.setName("name2");
+        company.setAddress(createAddressDTO());
+
+        return company;
     }
 
-    public Member createMember() {
-        Address address = Address.createAddress("city", "street", "zipcode");
-        Company company = Company.createCompany("companyA", address);
-        Team team = Team.createTeam("teamA", "test", company);
+    private AddressDTO createAddressDTO() {
 
-        MemberStatus status = MemberStatus.WORK;
-        Member member = Member.createMember("june", 1, "1", address, status, team);
+        AddressDTO address = new AddressDTO();
+        address.setCity("city");
+        address.setStreet("street");
+        address.setZipcode("zipcode");
+
+        return address;
+    }
+
+    private MemberDTO createMemberDTO(Long teamId) {
+
+        MemberDTO member = new MemberDTO();
+        member.setName("name");
+        member.setSalary(1);
+        member.setRank("rank");
+        member.setAddress(createAddressDTO());
+        member.setStatus(MemberStatus.WAIT);
+        member.setTeamId(teamId);
 
         return member;
     }
+
+    private TeamDTO createTeamDTO(long companyId) {
+
+        TeamDTO team = new TeamDTO();
+        team.setName("name");
+        team.setTask("task");
+        team.setMemberCount(0);
+        team.setCompanyId(companyId);
+
+        return team;
+    }
+
 }

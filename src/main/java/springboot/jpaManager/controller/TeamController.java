@@ -17,7 +17,6 @@ import springboot.jpaManager.service.CompanyService;
 import springboot.jpaManager.service.TeamService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("team")

@@ -1,13 +1,17 @@
 package springboot.jpaManager.service;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.domain.*;
+import springboot.jpaManager.dto.AddressDTO;
+import springboot.jpaManager.dto.CompanyDTO;
+import springboot.jpaManager.dto.MemberDTO;
+import springboot.jpaManager.dto.TeamDTO;
 
 import java.util.List;
 
@@ -19,45 +23,42 @@ import static org.junit.Assert.*;
 public class MemberServiceTest {
 
     @Autowired
+    CompanyService companyService;
+    @Autowired
+    TeamService teamService;
+    @Autowired
     MemberService memberService;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Test
     public void saveMember() throws Exception {
 
         //given
-        Member member = createMember();
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
+        TeamDTO team = createTeamDTO(companyId);
+        Long teamId = teamService.saveTeam(team);
+        MemberDTO member = createMemberDTO(teamId);
 
         //when
         Long memberId = memberService.saveMember(member);
+        Member member2 = memberService.findOne(memberId);
 
         //then
-        assertEquals("멤버id로 찾아온값이 세이브하기전 member와 같아야 함",member, memberService.findOne(memberId));
+        assertEquals("멤버id로 찾아온값이 세이브하기전 member와 같아야 함",member2.getName(), member.getName());
 
     }
 
-    @Test
-    public void updateMember() throws Exception {
-
-        //given
-        Member origin = createMember();
-        Long memberId = memberService.saveMember(origin);
-        memberService.flush();
-
-        //when
-        Member member = createMember2();
-        memberService.updateMember(memberId, member);
-
-        //then
-        Member fresh = memberService.findOne(memberId);
-        assertEquals("업데이트된 멤버의 name은 업데이트데이터의 name과 같다", fresh.getName(), member.getName());
-
-    }
-    
     @Test
     public void deleteMember() throws Exception {
        
         //given
-        Member member = createMember();
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
+        TeamDTO team = createTeamDTO(companyId);
+        Long teamId = teamService.saveTeam(team);
+        MemberDTO member = createMemberDTO(teamId);
         Long memberId = memberService.saveMember(member);
         memberService.flush();
 
@@ -74,35 +75,71 @@ public class MemberServiceTest {
     public void findByName() throws Exception {
 
         //given
-        Member member = createMember();
-        memberService.saveMember(member);
+        CompanyDTO company = createCompanyDTO();
+        Long companyId = companyService.saveCompany(company);
+        TeamDTO team = createTeamDTO(companyId);
+        Long teamId = teamService.saveTeam(team);
+        MemberDTO member = createMemberDTO(teamId);
+        Long memberId = memberService.saveMember(member);
+        memberService.flush();
 
         //when
         List<Member> memberList = memberService.findByName(member.getName());
+        Member member2 = memberService.findOne(memberId);
 
         //then
-        assertEquals(member, memberList.get(0));
+        assertEquals(member2, memberList.get(0));
 
     }
 
-    public Member createMember() {
-        Address address = Address.createAddress("city", "street", "zipcode");
-        Company company = Company.createCompany("companyA", address);
-        Team team = Team.createTeam("teamA", "test", company);
 
-        MemberStatus status = MemberStatus.WORK;
-        Member member = Member.createMember("june", 1, "1", address, status, team);
+    public Company createCompany() {
+
+        return modelMapper.map(createCompanyDTO(), Company.class);
+    }
+
+    private CompanyDTO createCompanyDTO() {
+
+        CompanyDTO company = new CompanyDTO();
+        company.setName("name");
+        company.setAddress(createAddressDTO());
+
+        return company;
+    }
+
+    private AddressDTO createAddressDTO() {
+
+        AddressDTO address = new AddressDTO();
+        address.setCity("city");
+        address.setStreet("street");
+        address.setZipcode("zipcode");
+
+        return address;
+    }
+
+    private MemberDTO createMemberDTO(Long teamId) {
+
+        MemberDTO member = new MemberDTO();
+        member.setName("name");
+        member.setSalary(1);
+        member.setRank("rank");
+        member.setAddress(createAddressDTO());
+        member.setStatus(MemberStatus.WAIT);
+        member.setTeamId(teamId);
 
         return member;
     }
-    public Member createMember2() {
-        Address address = Address.createAddress("city2", "street2", "zipcode2");
-        Company company = Company.createCompany("companyB", address);
-        Team team = Team.createTeam("teamB", "test2", company);
 
-        MemberStatus status = MemberStatus.WORK;
-        Member member = Member.createMember("june2", 2, "2", address, status, team);
+    private TeamDTO createTeamDTO(long companyId) {
 
-        return member;
+        TeamDTO team = new TeamDTO();
+        team.setName("name");
+        team.setTask("task");
+        team.setMemberCount(0);
+        team.setCompanyId(companyId);
+
+        return team;
     }
+
+
 }
