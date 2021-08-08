@@ -27,8 +27,19 @@ public class TeamRepository {
         return em.find(Team.class, teamId);
     }
 
-    public List<Team> findAll() {
-        return em.createQuery("select t from Team t", Team.class).getResultList();
+    public List<Team> findAll_v1() {
+        return em.createQuery(
+                "select distinct t from Team t " +
+                        "join fetch t.company c " +
+                        "join fetch t.memberList m",
+                Team.class).getResultList();
+    }
+
+    public List<Team> findAll_v2() {
+        return em.createQuery(
+                "select distinct t from Team t " +
+                        "join fetch t.company c ",
+                Team.class).getResultList();
     }
 
     public List<Team> findByName(String teamName) {
@@ -40,4 +51,6 @@ public class TeamRepository {
     public void flush() {
         em.flush();
     }
+
+
 }

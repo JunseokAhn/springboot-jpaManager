@@ -16,7 +16,6 @@ import springboot.jpaManager.dto.TeamDTO;
 import springboot.jpaManager.repository.CompanyRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -122,7 +121,7 @@ public class CompanyServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Company> companyList = companyRepository.findAll_v2();
+        List<Company> companyList = companyRepository.findAll_v1();
         List<CompanyDTO.TeamList> companyDTOList = method.mapList(companyList, CompanyDTO.TeamList.class);
 
         //then
@@ -156,7 +155,7 @@ public class CompanyServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Company> companyList2 = companyRepository.findAll_v3();
+        List<Company> companyList2 = companyRepository.findAll_v2();
         List<CompanyDTO.TeamList> companyDTOList2 = method.mapList(companyList2, CompanyDTO.TeamList.class);
 
         for (CompanyDTO.TeamList c : companyDTOList2) {

@@ -48,7 +48,7 @@ public class MemberService {
     }
 
     public List<Member> findAll() {
-        return memberRepository.findAll();
+        return memberRepository.findAll_v1();
     }
 
     public void flush() {

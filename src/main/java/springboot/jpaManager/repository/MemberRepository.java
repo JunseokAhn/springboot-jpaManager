@@ -26,8 +26,11 @@ public class MemberRepository {
         return em.find(Member.class, memberId);
     }
 
-    public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class).getResultList();
+    public List<Member> findAll_v1() {
+        return em.createQuery(
+                "select distinct m from Member m" +
+                        " join fetch m.team t",
+                Member.class).getResultList();
     }
 
     public List<Member> findByName(String memberName) {

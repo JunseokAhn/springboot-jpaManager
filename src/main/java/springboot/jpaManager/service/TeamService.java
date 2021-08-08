@@ -34,7 +34,7 @@ public class TeamService {
         Team origin = findOne(teamDTO.getId());
         Company company = companyService.findOne(teamDTO.getCompanyId());
 
-        origin.update(teamDTO,company);
+        origin.update(teamDTO, company);
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class TeamService {
     }
 
     public List<Team> findAll() {
-        return teamRepository.findAll();
+        return teamRepository.findAll_v2();
     }
 
     public void flush() {

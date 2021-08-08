@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.*;
 import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
+import springboot.jpaManager.repository.TeamRepository;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -28,6 +32,10 @@ public class TeamServiceTest {
     MemberService memberService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    TeamRepository teamRepository;
+    @Autowired
+    Method method;
 
     @Test
     public void saveTeam() throws Exception {
@@ -67,10 +75,9 @@ public class TeamServiceTest {
 
         //then
         Team team4 = teamService.findOne(teamId);
-        assertEquals("업데이트 전과 후의 값이 같다",team3.getCompanyName(), team4.getCompany().getName());
+        assertEquals("업데이트 전과 후의 값이 같다", team3.getCompanyName(), team4.getCompany().getName());
 
     }
-
 
 
     @Test
@@ -112,7 +119,7 @@ public class TeamServiceTest {
 
         //then
         Team team2 = teamService.findOne(teamId);
-        assertNull("팀은 삭제된다.",team2);
+        assertNull("팀은 삭제된다.", team2);
         assertEquals("팀을 삭제하면, 팀원의 상태는 대기중으로 바뀐다", MemberStatus.WAIT, member.getStatus());
     }
 
@@ -141,6 +148,76 @@ public class TeamServiceTest {
         assertEquals("멤버의 팀에는 추가한 팀이 들어감", member2.getTeam(), team2);
     }
 
+    //쿼리한방에 모든 데이터를 가지고 옴
+    @Test
+    public void findAll_v2() throws Exception {
+
+        //given
+        CompanyDTO company = createCompanyDTO("companyA");
+        Long companyId = companyService.saveCompany(company);
+        CompanyDTO company2 = createCompanyDTO("companyB");
+        Long companyId2 = companyService.saveCompany(company2);
+
+        TeamDTO team = createTeamDTO(companyId, "teamA");
+        Long teamId = teamService.saveTeam(team);
+        TeamDTO team2 = createTeamDTO(companyId2, "teamB");
+        Long teamId2 = teamService.saveTeam(team2);
+        TeamDTO team3 = createTeamDTO(companyId2, "teamC");
+        Long teamId3 = teamService.saveTeam(team3);
+
+        MemberDTO member = createMemberDTO(teamId);
+        Long memberId = memberService.saveMember(member);
+
+        //when
+        List<Team> teamList = teamRepository.findAll_v1();
+
+        List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
+
+        //then
+        for (TeamDTO.List m : TeamDTOList) {
+            System.out.println("ref = " + m + "id = " + m.getId());
+            System.out.println("name = " + m.getName());
+        }
+
+    }
+
+    /*
+    쿼리 한방에 toOne까지 데이터를 가져온 후,
+    toMany컬럼의 데이터를 가져와서 자바에서 조립하는방식
+    페이징가능
+    */
+    @Test
+    public void findAll_v3() throws Exception {
+
+        //given
+        CompanyDTO company = createCompanyDTO("companyA");
+        Long companyId = companyService.saveCompany(company);
+        CompanyDTO company2 = createCompanyDTO("companyB");
+        Long companyId2 = companyService.saveCompany(company2);
+
+        TeamDTO team = createTeamDTO(companyId, "teamA");
+        Long teamId = teamService.saveTeam(team);
+        TeamDTO team2 = createTeamDTO(companyId2, "teamB");
+        Long teamId2 = teamService.saveTeam(team2);
+        TeamDTO team3 = createTeamDTO(companyId2, "teamC");
+        Long teamId3 = teamService.saveTeam(team3);
+
+        MemberDTO member = createMemberDTO(teamId);
+        Long memberId = memberService.saveMember(member);
+
+        //when
+        List<Team> teamList = teamRepository.findAll_v2();
+
+        List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
+
+        //then
+        for (TeamDTO.List m : TeamDTOList) {
+            System.out.println("ref = " + m + "id = " + m.getId());
+            System.out.println("name = " + m.getName());
+        }
+
+    }
+
     public Company createCompany() {
 
         return modelMapper.map(createCompanyDTO(), Company.class);
@@ -150,6 +227,15 @@ public class TeamServiceTest {
 
         CompanyDTO company = new CompanyDTO();
         company.setName("name");
+        company.setAddress(createAddressDTO());
+
+        return company;
+    }
+
+    private CompanyDTO createCompanyDTO(String companyName) {
+
+        CompanyDTO company = new CompanyDTO();
+        company.setName(companyName);
         company.setAddress(createAddressDTO());
 
         return company;
@@ -182,6 +268,17 @@ public class TeamServiceTest {
 
         TeamDTO team = new TeamDTO();
         team.setName("name");
+        team.setTask("task");
+        team.setMemberCount(0);
+        team.setCompanyId(companyId);
+
+        return team;
+    }
+
+    private TeamDTO createTeamDTO(long companyId, String teamName) {
+
+        TeamDTO team = new TeamDTO();
+        team.setName(teamName);
         team.setTask("task");
         team.setMemberCount(0);
         team.setCompanyId(companyId);

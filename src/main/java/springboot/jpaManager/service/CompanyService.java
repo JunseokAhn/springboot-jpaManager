@@ -54,7 +54,7 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-        return companyRepository.findAll();
+        return companyRepository.findAll_v2();
     }
 
     public void flush() {
