@@ -20,4 +20,10 @@ public class Method {
         ).collect(Collectors.toList());
     }
 
+    public Long isNotReflected(Long id) {
+
+        if (id <= 0)
+            throw new RuntimeException("save failed");
+        return id;
+    }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
@@ -21,12 +22,13 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
+    private final Method method;
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
         Company company = modelMapper.map(companyDTO, Company.class);
 
-        return companyRepository.save(company);
+        return method.isNotReflected(companyRepository.save(company));
     }
 
     @Transactional

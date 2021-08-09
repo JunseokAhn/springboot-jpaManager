@@ -3,6 +3,7 @@ package springboot.jpaManager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.MemberDTO;
@@ -17,14 +18,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TeamService teamService;
+    private final Method method;
 
     @Transactional
     public Long saveMember(MemberDTO memberDTO) {
 
         Team team = teamService.findOne(memberDTO.getTeamId());
         Member member = Member.createMember(memberDTO, team);
-
-        return memberRepository.save(member);
+        return method.isNotReflected(memberRepository.save(member));
     }
 
     @Transactional
