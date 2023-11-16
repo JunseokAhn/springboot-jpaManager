@@ -13,7 +13,7 @@ import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.MemberRepository;
+import springboot.jpaManager.repository.JpqlMemberRepository;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class MemberServiceTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    MemberRepository memberRepository;
+    JpqlMemberRepository memberRepository;
     @Autowired
     ModelMapper modelMapper;
     @Autowired
@@ -119,7 +119,7 @@ public class MemberServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Member> memberList = memberRepository.findAll_v1();
+        List<Member> memberList = memberRepository.findAll_noOption();
 
 
         modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings(mapper -> {

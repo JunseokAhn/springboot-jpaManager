@@ -7,7 +7,7 @@ import springboot.jpaManager.Method;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.MemberDTO;
-import springboot.jpaManager.repository.MemberRepository;
+import springboot.jpaManager.repository.JpqlMemberRepository;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final JpqlMemberRepository memberRepository;
     private final TeamService teamService;
     private final Method method;
 
@@ -49,7 +49,7 @@ public class MemberService {
     }
 
     public List<Member> findAll() {
-        return memberRepository.findAll_v1();
+        return memberRepository.findAll_noOption();
     }
 
     public void flush() {

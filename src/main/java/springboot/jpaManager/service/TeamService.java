@@ -8,8 +8,8 @@ import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.MemberRepository;
-import springboot.jpaManager.repository.TeamRepository;
+import springboot.jpaManager.repository.JpqlMemberRepository;
+import springboot.jpaManager.repository.JpqlTeamRepository;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import java.util.List;
 public class TeamService {
 
     private final CompanyService companyService;
-    private final TeamRepository teamRepository;
-    private final MemberRepository memberRepository;
+    private final JpqlTeamRepository teamRepository;
+    private final JpqlMemberRepository memberRepository;
     private final Method method;
 
     @Transactional
@@ -58,7 +58,7 @@ public class TeamService {
     }
 
     public List<Team> findAll() {
-        return teamRepository.findAll_v2();
+        return teamRepository.findAll_paging_inMemory();
     }
 
     public void flush() {

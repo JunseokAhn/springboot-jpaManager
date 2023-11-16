@@ -8,16 +8,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jpaManager.Method;
-import springboot.jpaManager.domain.*;
+import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.domain.Member;
+import springboot.jpaManager.domain.MemberStatus;
+import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.CompanyRepository;
+import springboot.jpaManager.repository.JpqlCompanyRepository;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @SpringBootTest
 @Transactional
@@ -27,7 +31,7 @@ public class CompanyServiceTest {
     @Autowired
     CompanyService companyService;
     @Autowired
-    CompanyRepository companyRepository;
+    JpqlCompanyRepository companyRepository;
     @Autowired
     TeamService teamService;
     @Autowired
@@ -36,6 +40,7 @@ public class CompanyServiceTest {
     ModelMapper modelMapper;
     @Autowired
     Method method;
+
 
     @Test
     public void saveCompany() throws Exception {
@@ -121,7 +126,7 @@ public class CompanyServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Company> companyList = companyRepository.findAll_v1();
+        List<Company> companyList = companyRepository.findAll();
         List<CompanyDTO.TeamList> companyDTOList = method.mapList(companyList, CompanyDTO.TeamList.class);
 
         //then
@@ -155,7 +160,7 @@ public class CompanyServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Company> companyList2 = companyRepository.findAll_v2();
+        List<Company> companyList2 = companyRepository.findAll();
         List<CompanyDTO.TeamList> companyDTOList2 = method.mapList(companyList2, CompanyDTO.TeamList.class);
 
         for (CompanyDTO.TeamList c : companyDTOList2) {

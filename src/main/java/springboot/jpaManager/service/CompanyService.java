@@ -9,8 +9,8 @@ import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
-import springboot.jpaManager.repository.CompanyRepository;
-import springboot.jpaManager.repository.MemberRepository;
+import springboot.jpaManager.repository.JpqlCompanyRepository;
+import springboot.jpaManager.repository.JpqlMemberRepository;
 
 import java.util.List;
 
@@ -19,15 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyService {
 
-    private final CompanyRepository companyRepository;
-    private final MemberRepository memberRepository;
+    private final JpqlCompanyRepository companyRepository;
+    private final JpqlMemberRepository memberRepository;
     private final ModelMapper modelMapper;
     private final Method method;
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
         Company company = modelMapper.map(companyDTO, Company.class);
-
         return method.isNotReflected(companyRepository.save(company));
     }
 
@@ -55,14 +54,13 @@ public class CompanyService {
         return companyRepository.findOne(companyId);
     }
 
-    public List<Company> findAll() {
-        return companyRepository.findAll_v2();
-    }
-
     public void flush() {
         companyRepository.flush();
     }
 
+    public List<Company> findAll() {
+        return companyRepository.findAll();
+    }
 }
 
 

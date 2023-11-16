@@ -13,7 +13,7 @@ import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.TeamRepository;
+import springboot.jpaManager.repository.JpqlTeamRepository;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class TeamServiceTest {
     @Autowired
     ModelMapper modelMapper;
     @Autowired
-    TeamRepository teamRepository;
+    JpqlTeamRepository teamRepository;
     @Autowired
     Method method;
 
@@ -169,7 +169,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_v1();
+        List<Team> teamList = teamRepository.findAll_noOption();
 
         List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
 
@@ -206,7 +206,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_v2();
+        List<Team> teamList = teamRepository.findAll_paging_inMemory();
 
         List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
 

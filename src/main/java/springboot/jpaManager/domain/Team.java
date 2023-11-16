@@ -22,7 +22,7 @@ public class Team {
     private String name;
     private String task;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
