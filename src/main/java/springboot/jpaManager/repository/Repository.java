@@ -9,8 +9,6 @@ import java.util.Map;
 public interface Repository<T> {
 
 
-    Map<String,String> map= new HashMap<>();
-    final EntityManager em = null;
     T findOne(Long id);
     Long save(T t);
 

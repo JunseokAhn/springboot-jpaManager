@@ -31,7 +31,7 @@ public class JpqlMemberRepository extends JpqlRepository<Member> {
     }
 
     @Override
-    public List<Member> findAll_noOption() {
+    public List<Member> findAll_noDistinct() {
         return em.createQuery(
                 "select m from Member m" +
                         " join m.team t",
@@ -50,6 +50,14 @@ public class JpqlMemberRepository extends JpqlRepository<Member> {
     List<Member> findAll_fetchJoin() {
         return em.createQuery(
                 "select distinct m from Member m" +
+                        " join fetch m.team t",
+                Member.class).getResultList();
+    }
+
+    @Override
+    List<Member> findAll_fetchJoin_noDistinct() {
+        return em.createQuery(
+                "select m from Member m" +
                         " join fetch m.team t",
                 Member.class).getResultList();
     }

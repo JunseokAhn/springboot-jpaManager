@@ -119,7 +119,7 @@ public class MemberServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Member> memberList = memberRepository.findAll_noOption();
+        List<Member> memberList = memberRepository.findAll_noDistinct();
 
 
         modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings(mapper -> {

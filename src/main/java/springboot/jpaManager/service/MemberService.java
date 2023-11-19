@@ -49,7 +49,7 @@ public class MemberService {
     }
 
     public List<Member> findAll() {
-        return memberRepository.findAll_noOption();
+        return memberRepository.findAll_noDistinct();
     }
 
     public void flush() {

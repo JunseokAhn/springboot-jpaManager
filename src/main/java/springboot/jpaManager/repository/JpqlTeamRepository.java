@@ -33,7 +33,7 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    public List<Team> findAll_noOption() {
+    public List<Team> findAll_noDistinct() {
         return em.createQuery(
                 "select t from Team t " +
                         "join t.company c " +
@@ -60,16 +60,35 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    public List<Team> findAll_paging_inMemory() {
+    List<Team> findAll_fetchJoin_noDistinct() {
         return em.createQuery(
-                "select distinct t from Team t " +
-                        "join fetch t.company c ",
+                "select t from Team t " +
+                        "join fetch t.company c " +
+                        "join fetch t.memberList m",
                 Team.class).getResultList();
     }
 
     @Override
+    public List<Team> findAll_paging_inMemory() {
+        return em.createQuery(
+                        "select distinct t from Team t " +
+                                "join fetch t.company c " +
+                                "join fetch t.memberList m",
+                        Team.class)
+                .setFirstResult(1)
+                .setMaxResults(2)
+                .getResultList();
+    }
+
+    @Override
     List<Team> findAll_paging_inDB() {
-        return null;
+        return em.createQuery(
+                        "select distinct t from Team t " +
+                                "join fetch t.company c",
+                        Team.class)
+                .setFirstResult(1)
+                .setMaxResults(2)
+                .getResultList();
     }
 
 

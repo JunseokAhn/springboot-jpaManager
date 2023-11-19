@@ -33,7 +33,7 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
 
 
     @Override
-    List<Company> findAll_noOption() {
+    List<Company> findAll_noDistinct() {
         return em.createQuery(
                 "select c from Company c " +
                         "join c.teamList t ",
@@ -53,6 +53,14 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
     List<Company> findAll_fetchJoin() {
         return em.createQuery(
                 "select distinct c from Company c " +
+                        "join fetch c.teamList t ",
+                Company.class).getResultList();
+    }
+
+    @Override
+    List<Company> findAll_fetchJoin_noDistinct() {
+        return em.createQuery(
+                "select c from Company c " +
                         "join fetch c.teamList t ",
                 Company.class).getResultList();
     }

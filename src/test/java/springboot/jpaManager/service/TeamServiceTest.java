@@ -169,7 +169,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_noOption();
+        List<Team> teamList = teamRepository.findAll_noDistinct();
 
         List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
 

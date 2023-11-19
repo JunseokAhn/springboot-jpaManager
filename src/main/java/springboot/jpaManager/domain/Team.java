@@ -3,6 +3,7 @@ package springboot.jpaManager.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import springboot.jpaManager.dto.TeamDTO;
 
 import javax.persistence.*;
@@ -22,10 +23,11 @@ public class Team {
     private String name;
     private String task;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE)
     private List<Member> memberList = new ArrayList<>();
 
