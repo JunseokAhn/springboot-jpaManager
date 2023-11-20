@@ -1,9 +1,8 @@
-package springboot.jpaManager.api;
+package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-import springboot.jpaManager.Method;
+import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.CompanyApiDTO;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -18,13 +17,12 @@ import java.util.List;
 public class CompanyApiController {
 
     private final CompanyService companyService;
-    private final ModelMapper modelMapper;
-    private final Method method;
+    private final Utils utils;
 
     @PostMapping("create")
     public CompanyApiDTO.Response createCompany(@RequestBody @Valid CompanyApiDTO.Request request) {
 
-        CompanyDTO company = modelMapper.map(request, CompanyDTO.class);
+        CompanyDTO company = utils.map(request, CompanyDTO.class);
         Long id = companyService.saveCompany(company);
         return new CompanyApiDTO.Response(id);
     }
@@ -34,17 +32,17 @@ public class CompanyApiController {
             @PathVariable("id") Long id,
             @RequestBody @Valid CompanyApiDTO.UpdateRequest request) {
 
-        CompanyDTO.UpdateAll companyDTO = modelMapper.map(request, CompanyDTO.UpdateAll.class);
+        CompanyDTO.UpdateAll companyDTO = utils.map(request, CompanyDTO.UpdateAll.class);
         companyService.updateCompany(companyDTO);
         Company updated = companyService.findOne(id);
 
-        return modelMapper.map(updated, CompanyApiDTO.UpdateResponse.class);
+        return utils.map(updated, CompanyApiDTO.UpdateResponse.class);
     }
 
     @GetMapping("list")
     public CompanyApiDTO.ListResponse listCompany() {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
+        List<CompanyDTO> companyList2 = utils.map(companyList, CompanyDTO.class);
 
         return new CompanyApiDTO.ListResponse(companyList2.size(), companyList2);
     }

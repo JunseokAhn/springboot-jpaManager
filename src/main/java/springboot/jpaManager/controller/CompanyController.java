@@ -2,11 +2,10 @@ package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import springboot.jpaManager.Method;
+import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.service.CompanyService;
@@ -20,8 +19,7 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final ModelMapper modelMapper;
-    private final Method method;
+    private final Utils utils;
 
     @GetMapping("register")
     public String companyRegister(Model model) {
@@ -40,7 +38,7 @@ public class CompanyController {
     @GetMapping("list")
     public String companyList(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
+        List<CompanyDTO> companyList2 = utils.map(companyList, CompanyDTO.class);
 
         model.addAttribute("company_list", companyList2);
         return "company/list";
@@ -49,7 +47,7 @@ public class CompanyController {
     @GetMapping("edit/{companyId}")
     public String companyEdit(@PathVariable("companyId") Long companyId, Model model) {
         Company company = companyService.findOne(companyId);
-        CompanyDTO companyDTO = modelMapper.map(company, CompanyDTO.class);
+        CompanyDTO companyDTO = utils.map(company, CompanyDTO.class);
         model.addAttribute("company", companyDTO);
         return "company/edit";
     }

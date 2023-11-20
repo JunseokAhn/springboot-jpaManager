@@ -2,14 +2,12 @@ package springboot.jpaManager.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.Method;
-import springboot.jpaManager.domain.*;
-import springboot.jpaManager.dto.AddressDTO;
+import springboot.jpaManager.common.Utils;
+import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
@@ -17,7 +15,9 @@ import springboot.jpaManager.repository.JpqlMemberRepository;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static springboot.jpaManager.TestUtils.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,9 +33,8 @@ public class MemberServiceTest {
     @Autowired
     JpqlMemberRepository memberRepository;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    Method method;
+    Utils utils;
+
 
     @Test
     public void saveMember() throws Exception {
@@ -121,13 +120,7 @@ public class MemberServiceTest {
         //when
         List<Member> memberList = memberRepository.findAll_noDistinct();
 
-
-        modelMapper.typeMap(Member.class, MemberDTO.List.class).addMappings(mapper -> {
-            mapper.map(Member -> Member.getTeam().getName(), MemberDTO.List::setTeamName);
-            mapper.map(Member -> Member.getTeam().getCompany().getName(), MemberDTO.List::setCompanyName);
-        });
-
-        List<MemberDTO.List> memberDTOList = method.mapList(memberList, MemberDTO.List.class);
+        List<MemberDTO.List> memberDTOList = utils.map(memberList, MemberDTO.List.class);
 
         //then
         for (MemberDTO.List m : memberDTOList) {
@@ -135,75 +128,6 @@ public class MemberServiceTest {
             System.out.println("name = " + m.getName());
             System.out.println("status = " + m.getStatus());
         }
-
-    }
-
-    public Company createCompany() {
-
-        return modelMapper.map(createCompanyDTO(), Company.class);
-    }
-
-    private CompanyDTO createCompanyDTO(String companyName) {
-
-        CompanyDTO company = new CompanyDTO();
-        company.setName(companyName);
-        company.setAddress(createAddressDTO());
-
-        return company;
-    }
-
-    private CompanyDTO createCompanyDTO() {
-
-        CompanyDTO company = new CompanyDTO();
-        company.setName("name");
-        company.setAddress(createAddressDTO());
-
-        return company;
-    }
-
-    private AddressDTO createAddressDTO() {
-
-        AddressDTO address = new AddressDTO();
-        address.setCity("city");
-        address.setStreet("street");
-        address.setZipcode("zipcode");
-
-        return address;
-    }
-
-    private MemberDTO createMemberDTO(Long teamId) {
-
-        MemberDTO member = new MemberDTO();
-        member.setName("name");
-        member.setSalary(1);
-        member.setRank("rank");
-        member.setAddress(createAddressDTO());
-        member.setStatus(MemberStatus.WAIT);
-        member.setTeamId(teamId);
-
-        return member;
-    }
-
-    private TeamDTO createTeamDTO(long companyId) {
-
-        TeamDTO team = new TeamDTO();
-        team.setName("name");
-        team.setTask("task");
-        team.setMemberCount(0);
-        team.setCompanyId(companyId);
-
-        return team;
-    }
-
-    private TeamDTO createTeamDTO(long companyId, String teamName) {
-
-        TeamDTO team = new TeamDTO();
-        team.setName(teamName);
-        team.setTask("task");
-        team.setMemberCount(0);
-        team.setCompanyId(companyId);
-
-        return team;
     }
 
 }

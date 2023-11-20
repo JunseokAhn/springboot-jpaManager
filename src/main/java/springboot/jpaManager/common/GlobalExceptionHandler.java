@@ -1,4 +1,4 @@
-package springboot.jpaManager.controller;
+package springboot.jpaManager.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class Handler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<ErrorResponse> HandlerRuntimeException(RuntimeException exception) {

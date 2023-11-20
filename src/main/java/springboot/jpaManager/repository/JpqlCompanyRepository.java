@@ -33,7 +33,7 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
 
 
     @Override
-    List<Company> findAll_noDistinct() {
+    public List<Company> findAll_noDistinct() {
         return em.createQuery(
                 "select c from Company c " +
                         "join c.teamList t ",
@@ -41,7 +41,7 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
     }
 
     @Override
-    List<Company> findAll_distinct() {
+    public List<Company> findAll_distinct() {
         return em.createQuery(
                 "select distinct c from Company c " +
                         "join c.teamList t ",
@@ -50,7 +50,7 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
 
 
     @Override
-    List<Company> findAll_fetchJoin() {
+    public List<Company> findAll_fetchJoin() {
         return em.createQuery(
                 "select distinct c from Company c " +
                         "join fetch c.teamList t ",
@@ -58,7 +58,7 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
     }
 
     @Override
-    List<Company> findAll_fetchJoin_noDistinct() {
+    public List<Company> findAll_fetchJoin_noDistinct() {
         return em.createQuery(
                 "select c from Company c " +
                         "join fetch c.teamList t ",
@@ -67,14 +67,14 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
 
 
     @Override
-    List<Company> findAll_paging_inMemory() {
+    public List<Company> findAll_paging_inMemory() {
         return em.createQuery(
                 "select distinct c from Company c",
                 Company.class).getResultList();
     }
 
     @Override
-    List<Company> findAll_paging_inDB() {
+    public List<Company> findAll_paging_inDB() {
         return null;
     }
 

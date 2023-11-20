@@ -42,7 +42,7 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    List<Team> findAll_distinct() {
+    public List<Team> findAll_distinct() {
         return em.createQuery(
                 "select distinct t from Team t " +
                         "join t.company c " +
@@ -51,7 +51,7 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    List<Team> findAll_fetchJoin() {
+    public List<Team> findAll_fetchJoin() {
         return em.createQuery(
                 "select distinct t from Team t " +
                         "join fetch t.company c " +
@@ -60,7 +60,7 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    List<Team> findAll_fetchJoin_noDistinct() {
+    public List<Team> findAll_fetchJoin_noDistinct() {
         return em.createQuery(
                 "select t from Team t " +
                         "join fetch t.company c " +
@@ -81,7 +81,7 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     }
 
     @Override
-    List<Team> findAll_paging_inDB() {
+    public List<Team> findAll_paging_inDB() {
         return em.createQuery(
                         "select distinct t from Team t " +
                                 "join fetch t.company c",

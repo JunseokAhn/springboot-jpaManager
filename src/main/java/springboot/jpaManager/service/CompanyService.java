@@ -1,10 +1,9 @@
 package springboot.jpaManager.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.Method;
+import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
@@ -21,13 +20,12 @@ public class CompanyService {
 
     private final JpqlCompanyRepository companyRepository;
     private final JpqlMemberRepository memberRepository;
-    private final ModelMapper modelMapper;
-    private final Method method;
+    private final Utils utils;
 
     @Transactional
     public Long saveCompany(CompanyDTO companyDTO) {
-        Company company = modelMapper.map(companyDTO, Company.class);
-        return method.isNotReflected(companyRepository.save(company));
+        Company company = utils.map(companyDTO, Company.class);
+        return utils.isNotReflected(companyRepository.save(company));
     }
 
     @Transactional
@@ -59,7 +57,7 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-        return companyRepository.findAll();
+        return companyRepository.findAll_fetchJoin();
     }
 }
 

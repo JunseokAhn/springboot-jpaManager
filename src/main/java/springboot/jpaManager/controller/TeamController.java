@@ -1,14 +1,13 @@
 package springboot.jpaManager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springboot.jpaManager.Method;
+import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
@@ -25,13 +24,12 @@ public class TeamController {
 
     private final CompanyService companyService;
     private final TeamService teamService;
-    private final ModelMapper modelMapper;
-    private final Method method;
+    private final Utils utils;
 
     @GetMapping("register")
     public String teamRegister(Model model) {
         List<Company> companyList = companyService.findAll();
-        List<CompanyDTO> companyList2 = method.mapList(companyList, CompanyDTO.class);
+        List<CompanyDTO> companyList2 = utils.map(companyList, CompanyDTO.class);
 
         model.addAttribute("form", new TeamDTO());
         model.addAttribute("companyList", companyList2);
@@ -49,7 +47,7 @@ public class TeamController {
     @GetMapping("list")
     public String teamList(Model model) {
         List<Team> teamList = teamService.findAll();
-        List<TeamDTO.List> teamList2 = method.mapList(teamList, TeamDTO.List.class);
+        List<TeamDTO.List> teamList2 = utils.map(teamList, TeamDTO.List.class);
 
         model.addAttribute("teamDTOList", teamList2);
         return "team/list";
@@ -60,12 +58,7 @@ public class TeamController {
 
         Team team = teamService.findOne(teamId);
 
-        modelMapper.typeMap(Team.class, TeamDTO.Update.class).addMappings(mapper -> {
-            mapper.map(Team -> Team.getCompany().getId(), TeamDTO.Update::setCompanyId);
-            mapper.map(Team -> Team.getCompany().getName(), TeamDTO.Update::setCompanyName);
-        });
-
-        TeamDTO.Update teamDTO = modelMapper.map(team, TeamDTO.Update.class);
+        TeamDTO.Update teamDTO = utils.map(team, TeamDTO.Update.class);
 
         List<Company> companyList = companyService.findAll();
 

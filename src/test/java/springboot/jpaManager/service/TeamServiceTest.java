@@ -2,13 +2,15 @@ package springboot.jpaManager.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.Method;
-import springboot.jpaManager.domain.*;
+import springboot.jpaManager.common.Utils;
+import springboot.jpaManager.domain.Company;
+import springboot.jpaManager.domain.Member;
+import springboot.jpaManager.domain.MemberStatus;
+import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
@@ -17,7 +19,8 @@ import springboot.jpaManager.repository.JpqlTeamRepository;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,11 +34,9 @@ public class TeamServiceTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
     JpqlTeamRepository teamRepository;
     @Autowired
-    Method method;
+    Utils utils;
 
     @Test
     public void saveTeam() throws Exception {
@@ -68,7 +69,7 @@ public class TeamServiceTest {
         CompanyDTO company2 = createCompanyDTO();
         Long companyId2 = companyService.saveCompany(company2);
         Team team2 = teamService.findOne(teamId);
-        TeamDTO.Update team3 = modelMapper.map(team2, TeamDTO.Update.class);
+        TeamDTO.Update team3 = utils.map(team2, TeamDTO.Update.class);
         team3.setCompanyId(companyId2);
 
         teamService.updateTeam(team3);
@@ -171,7 +172,7 @@ public class TeamServiceTest {
         //when
         List<Team> teamList = teamRepository.findAll_noDistinct();
 
-        List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
+        List<TeamDTO.List> TeamDTOList = utils.map(teamList, TeamDTO.List.class);
 
         //then
         for (TeamDTO.List m : TeamDTOList) {
@@ -208,7 +209,7 @@ public class TeamServiceTest {
         //when
         List<Team> teamList = teamRepository.findAll_paging_inMemory();
 
-        List<TeamDTO.List> TeamDTOList = method.mapList(teamList, TeamDTO.List.class);
+        List<TeamDTO.List> TeamDTOList = utils.map(teamList, TeamDTO.List.class);
 
         //then
         for (TeamDTO.List m : TeamDTOList) {
@@ -220,7 +221,7 @@ public class TeamServiceTest {
 
     public Company createCompany() {
 
-        return modelMapper.map(createCompanyDTO(), Company.class);
+        return utils.map(createCompanyDTO(), Company.class);
     }
 
     private CompanyDTO createCompanyDTO() {

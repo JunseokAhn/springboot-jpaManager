@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import springboot.jpaManager.Method;
+import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.MemberStatus;
@@ -37,10 +37,7 @@ public class CompanyServiceTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    Method method;
-
+    Utils utils;
 
     @Test
     public void saveCompany() throws Exception {
@@ -51,7 +48,7 @@ public class CompanyServiceTest {
 
         //when
         Company company2 = companyService.findOne(companyId);
-        Company company3 = modelMapper.map(company, Company.class);
+        Company company3 = utils.map(company, Company.class);
 
         //then
         assertEquals("생성된company와 저장된company는 같다", company3.getName(), company2.getName());
@@ -127,7 +124,7 @@ public class CompanyServiceTest {
 
         //when
         List<Company> companyList = companyRepository.findAll();
-        List<CompanyDTO.TeamList> companyDTOList = method.mapList(companyList, CompanyDTO.TeamList.class);
+        List<CompanyDTO.TeamList> companyDTOList = utils.map(companyList, CompanyDTO.TeamList.class);
 
         //then
         for (CompanyDTO.TeamList c : companyDTOList) {
@@ -161,7 +158,7 @@ public class CompanyServiceTest {
 
         //when
         List<Company> companyList2 = companyRepository.findAll();
-        List<CompanyDTO.TeamList> companyDTOList2 = method.mapList(companyList2, CompanyDTO.TeamList.class);
+        List<CompanyDTO.TeamList> companyDTOList2 = utils.map(companyList2, CompanyDTO.TeamList.class);
 
         for (CompanyDTO.TeamList c : companyDTOList2) {
             System.out.println("ref = " + c + "id = " + c.getId());
@@ -176,7 +173,7 @@ public class CompanyServiceTest {
 
     public Company createCompany() {
 
-        return modelMapper.map(createCompanyDTO(), Company.class);
+        return utils.map(createCompanyDTO(), Company.class);
     }
 
     private CompanyDTO createCompanyDTO() {
