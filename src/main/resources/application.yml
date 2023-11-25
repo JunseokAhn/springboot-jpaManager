@@ -1,6 +1,9 @@
 spring:
+  profiles:
+    active: dev
+
   datasource:
-    url: jdbc:h2:tcp://localhost/~/springboot-jpashop;
+    url: jdbc:h2:tcp://localhost/~/jpa-manager;
     username: sa
     password:
     driver-class-name: org.h2.Driver

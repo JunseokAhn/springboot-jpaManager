@@ -8,8 +8,8 @@ import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.JpqlMemberRepository;
-import springboot.jpaManager.repository.JpqlTeamRepository;
+import springboot.jpaManager.repository.entityManager.EmMemberRepository;
+import springboot.jpaManager.repository.entityManager.EmTeamRepository;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import java.util.List;
 public class TeamService {
 
     private final CompanyService companyService;
-    private final JpqlTeamRepository teamRepository;
-    private final JpqlMemberRepository memberRepository;
+    private final EmTeamRepository teamRepository;
+    private final EmMemberRepository memberRepository;
     private final Utils utils;
 
     @Transactional

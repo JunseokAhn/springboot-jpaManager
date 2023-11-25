@@ -15,7 +15,7 @@ import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.JpqlTeamRepository;
+import springboot.jpaManager.repository.entityManager.EmTeamRepository;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TeamServiceTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    JpqlTeamRepository teamRepository;
+    EmTeamRepository teamRepository;
     @Autowired
     Utils utils;
 
@@ -207,7 +207,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_paging_inMemory();
+        List<Team> teamList = teamRepository.findAll_paging_inMemory(1, 2);
 
         List<TeamDTO.List> TeamDTOList = utils.map(teamList, TeamDTO.List.class);
 

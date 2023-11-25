@@ -1,4 +1,4 @@
-package springboot.jpaManager.repository;
+package springboot.jpaManager.repository.entityManager;
 
 import org.springframework.stereotype.Repository;
 import springboot.jpaManager.domain.Member;
@@ -7,8 +7,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class JpqlMemberRepository extends JpqlRepository<Member> {
-    public JpqlMemberRepository(EntityManager em) {
+public class EmMemberRepository extends EmRepository<Member> {
+    public EmMemberRepository(EntityManager em) {
         super(em);
     }
 
@@ -63,13 +63,15 @@ public class JpqlMemberRepository extends JpqlRepository<Member> {
     }
 
     @Override
-    public List<Member> findAll_paging_inMemory() {
+    public List<Member> findAll_paging_inMemory(int start, int end) {
+        //미구현
         return null;
     }
 
 
     @Override
-    public List<Member> findAll_paging_inDB() {
+    public List<Member> findAll_paging_inDB(int start, int end) {
+        //미구현
         return null;
     }
 

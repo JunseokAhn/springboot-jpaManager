@@ -7,7 +7,7 @@ import springboot.jpaManager.common.Utils;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.MemberDTO;
-import springboot.jpaManager.repository.JpqlMemberRepository;
+import springboot.jpaManager.repository.entityManager.EmMemberRepository;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final JpqlMemberRepository memberRepository;
+    private final EmMemberRepository memberRepository;
     private final TeamService teamService;
     private final Utils utils;
 

@@ -11,7 +11,7 @@ import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.JpqlMemberRepository;
+import springboot.jpaManager.repository.entityManager.EmMemberRepository;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class MemberServiceTest {
     @Autowired
     MemberService memberService;
     @Autowired
-    JpqlMemberRepository memberRepository;
+    EmMemberRepository memberRepository;
     @Autowired
     Utils utils;
 

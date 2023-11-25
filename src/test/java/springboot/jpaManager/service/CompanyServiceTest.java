@@ -2,7 +2,6 @@ package springboot.jpaManager.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,7 +15,7 @@ import springboot.jpaManager.dto.AddressDTO;
 import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
-import springboot.jpaManager.repository.JpqlCompanyRepository;
+import springboot.jpaManager.repository.entityManager.EmCompanyRepository;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class CompanyServiceTest {
     @Autowired
     CompanyService companyService;
     @Autowired
-    JpqlCompanyRepository companyRepository;
+    EmCompanyRepository companyRepository;
     @Autowired
     TeamService teamService;
     @Autowired

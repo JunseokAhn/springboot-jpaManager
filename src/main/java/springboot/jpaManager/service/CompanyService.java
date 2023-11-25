@@ -8,8 +8,8 @@ import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
 import springboot.jpaManager.domain.Team;
 import springboot.jpaManager.dto.CompanyDTO;
-import springboot.jpaManager.repository.JpqlCompanyRepository;
-import springboot.jpaManager.repository.JpqlMemberRepository;
+import springboot.jpaManager.repository.entityManager.EmCompanyRepository;
+import springboot.jpaManager.repository.entityManager.EmMemberRepository;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyService {
 
-    private final JpqlCompanyRepository companyRepository;
-    private final JpqlMemberRepository memberRepository;
+    private final EmCompanyRepository companyRepository;
+    private final EmMemberRepository memberRepository;
     private final Utils utils;
 
     @Transactional

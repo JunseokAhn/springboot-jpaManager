@@ -1,17 +1,15 @@
-package springboot.jpaManager.repository;
+package springboot.jpaManager.repository.entityManager;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import springboot.jpaManager.domain.Company;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public class JpqlCompanyRepository extends JpqlRepository<Company> {
+public class EmCompanyRepository extends EmRepository<Company> {
 
-    public JpqlCompanyRepository(EntityManager em) {
+    public EmCompanyRepository(EntityManager em) {
         super(em);
     }
 
@@ -67,14 +65,15 @@ public class JpqlCompanyRepository extends JpqlRepository<Company> {
 
 
     @Override
-    public List<Company> findAll_paging_inMemory() {
+    public List<Company> findAll_paging_inMemory(int start, int end) {
         return em.createQuery(
                 "select distinct c from Company c",
                 Company.class).getResultList();
     }
 
     @Override
-    public List<Company> findAll_paging_inDB() {
+    public List<Company> findAll_paging_inDB(int start, int end) {
+        //미구현
         return null;
     }
 

@@ -1,4 +1,4 @@
-package springboot.jpaManager.repository;
+package springboot.jpaManager.repository.entityManager;
 
 import org.springframework.stereotype.Repository;
 import springboot.jpaManager.domain.Team;
@@ -7,9 +7,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class JpqlTeamRepository extends JpqlRepository<Team>{
+public class EmTeamRepository extends EmRepository<Team> {
 
-    public JpqlTeamRepository(EntityManager em){
+    public EmTeamRepository(EntityManager em){
         super(em);
     }
 
@@ -36,8 +36,8 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     public List<Team> findAll_noDistinct() {
         return em.createQuery(
                 "select t from Team t " +
-                        "join t.company c " +
-                        "join t.memberList m",
+                        "left outer join t.company c " +
+                        "left outer join t.memberList m",
                 Team.class).getResultList();
     }
 
@@ -45,8 +45,8 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     public List<Team> findAll_distinct() {
         return em.createQuery(
                 "select distinct t from Team t " +
-                        "join t.company c " +
-                        "join t.memberList m",
+                        "left outer join t.company c " +
+                        "left outer join t.memberList m",
                 Team.class).getResultList();
     }
 
@@ -54,8 +54,8 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     public List<Team> findAll_fetchJoin() {
         return em.createQuery(
                 "select distinct t from Team t " +
-                        "join fetch t.company c " +
-                        "join fetch t.memberList m",
+                        "left outer join fetch t.company c " +
+                        "left outer join fetch t.memberList m",
                 Team.class).getResultList();
     }
 
@@ -63,35 +63,32 @@ public class JpqlTeamRepository extends JpqlRepository<Team>{
     public List<Team> findAll_fetchJoin_noDistinct() {
         return em.createQuery(
                 "select t from Team t " +
-                        "join fetch t.company c " +
-                        "join fetch t.memberList m",
+                        "left outer join fetch t.company c " +
+                        "left outer join fetch t.memberList m",
                 Team.class).getResultList();
     }
 
     @Override
-    public List<Team> findAll_paging_inMemory() {
+    public List<Team> findAll_paging_inMemory(int start, int end) {
         return em.createQuery(
                         "select distinct t from Team t " +
-                                "join fetch t.company c " +
-                                "join fetch t.memberList m",
+                                "left outer join fetch t.company c " +
+                                "left outer join fetch t.memberList m",
                         Team.class)
-                .setFirstResult(1)
-                .setMaxResults(2)
+                .setFirstResult(start)
+                .setMaxResults(end)
                 .getResultList();
     }
 
     @Override
-    public List<Team> findAll_paging_inDB() {
+    public List<Team> findAll_paging_inDB(int start, int end) {
         return em.createQuery(
                         "select distinct t from Team t " +
-                                "join fetch t.company c",
+                                "left outer join fetch t.company c",
                         Team.class)
-                .setFirstResult(1)
-                .setMaxResults(2)
+                .setFirstResult(start)
+                .setMaxResults(end)
                 .getResultList();
     }
-
-
-
 
 }
