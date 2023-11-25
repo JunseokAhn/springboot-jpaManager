@@ -58,7 +58,7 @@ public class TeamService {
     }
 
     public List<Team> findAll() {
-        return teamRepository.findAll_fetchJoin();
+        return teamRepository.findAll();
     }
 
     public void flush() {

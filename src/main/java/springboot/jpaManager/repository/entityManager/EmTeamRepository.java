@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public class EmTeamRepository extends EmRepository<Team> {
 
-    public EmTeamRepository(EntityManager em){
+    public EmTeamRepository(EntityManager em) {
         super(em);
     }
 
@@ -25,7 +25,6 @@ public class EmTeamRepository extends EmRepository<Team> {
     }
 
 
-
     @Override
     public List<Team> findByName(String teamName) {
         return em.createQuery("select t from Team t where t.name =:name", Team.class)
@@ -33,25 +32,7 @@ public class EmTeamRepository extends EmRepository<Team> {
     }
 
     @Override
-    public List<Team> findAll_noDistinct() {
-        return em.createQuery(
-                "select t from Team t " +
-                        "left outer join t.company c " +
-                        "left outer join t.memberList m",
-                Team.class).getResultList();
-    }
-
-    @Override
-    public List<Team> findAll_distinct() {
-        return em.createQuery(
-                "select distinct t from Team t " +
-                        "left outer join t.company c " +
-                        "left outer join t.memberList m",
-                Team.class).getResultList();
-    }
-
-    @Override
-    public List<Team> findAll_fetchJoin() {
+    public List<Team> findAll() {
         return em.createQuery(
                 "select distinct t from Team t " +
                         "left outer join fetch t.company c " +
@@ -59,29 +40,9 @@ public class EmTeamRepository extends EmRepository<Team> {
                 Team.class).getResultList();
     }
 
-    @Override
-    public List<Team> findAll_fetchJoin_noDistinct() {
-        return em.createQuery(
-                "select t from Team t " +
-                        "left outer join fetch t.company c " +
-                        "left outer join fetch t.memberList m",
-                Team.class).getResultList();
-    }
 
     @Override
-    public List<Team> findAll_paging_inMemory(int start, int end) {
-        return em.createQuery(
-                        "select distinct t from Team t " +
-                                "left outer join fetch t.company c " +
-                                "left outer join fetch t.memberList m",
-                        Team.class)
-                .setFirstResult(start)
-                .setMaxResults(end)
-                .getResultList();
-    }
-
-    @Override
-    public List<Team> findAll_paging_inDB(int start, int end) {
+    public List<Team> findWithPaging(int start, int end) {
         return em.createQuery(
                         "select distinct t from Team t " +
                                 "left outer join fetch t.company c",

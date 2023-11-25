@@ -57,7 +57,7 @@ public class CompanyService {
     }
 
     public List<Company> findAll() {
-        return companyRepository.findAll_fetchJoin();
+        return companyRepository.findAll();
     }
 }
 

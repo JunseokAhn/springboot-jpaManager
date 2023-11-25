@@ -97,9 +97,8 @@ public class MemberServiceTest {
 
     }
 
-    //쿼리한방에 모든 데이터를 가지고 옴
     @Test
-    public void findAll_v2() throws Exception {
+    public void findAll() throws Exception {
 
         //given
         CompanyDTO company = createCompanyDTO("companyA");
@@ -118,7 +117,7 @@ public class MemberServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Member> memberList = memberRepository.findAll_noDistinct();
+        List<Member> memberList = memberRepository.findAll();
 
         List<MemberDTO.List> memberDTOList = utils.map(memberList, MemberDTO.List.class);
 

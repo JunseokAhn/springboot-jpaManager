@@ -170,7 +170,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_noDistinct();
+        List<Team> teamList = teamRepository.findAll();
 
         List<TeamDTO.List> TeamDTOList = utils.map(teamList, TeamDTO.List.class);
 
@@ -207,7 +207,7 @@ public class TeamServiceTest {
         Long memberId = memberService.saveMember(member);
 
         //when
-        List<Team> teamList = teamRepository.findAll_paging_inMemory(1, 2);
+        List<Team> teamList = teamRepository.findAll();
 
         List<TeamDTO.List> TeamDTOList = utils.map(teamList, TeamDTO.List.class);
 
