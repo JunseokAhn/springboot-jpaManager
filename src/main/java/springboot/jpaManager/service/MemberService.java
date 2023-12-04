@@ -56,4 +56,7 @@ public class MemberService {
         memberRepository.flush();
     }
 
+    public List<Member> findByTeam(long teamId) {
+        return memberRepository.findByTeamId(teamId);
+    }
 }

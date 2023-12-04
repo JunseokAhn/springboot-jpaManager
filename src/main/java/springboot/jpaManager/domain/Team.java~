@@ -52,7 +52,7 @@ public class Team {
     }
 
     public void changeTeamMemberWait() {
-        for (Member member : this.memberList) {
+        for (Member member : memberList) {
             member.changeStatus(MemberStatus.WAIT);
         }
     }

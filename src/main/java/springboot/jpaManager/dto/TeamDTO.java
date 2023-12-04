@@ -1,5 +1,7 @@
 package springboot.jpaManager.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +30,8 @@ public class TeamDTO {
 
     @Data
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class Update {
 
         private Long id;

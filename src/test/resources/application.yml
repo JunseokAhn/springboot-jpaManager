@@ -8,7 +8,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    sql-script-encoding: UTF-8
 
   jpa:
     properties:
@@ -27,19 +26,30 @@ server:
 ---
 
 spring:
-  profiles: test
   datasource:
-    url: jdbc:h2:mem:test; #인메모리모드
-    sql-script-encoding: UTF-8
+#    url: jdbc:h2:mem:test; #인메모리모드
+    url: jdbc:h2:tcp://localhost/~/test; #서버모드
   jpa:
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      encoding: UTF-8
+      mode: always
+  config:
+    activate:
+      on-profile: test
+
+
 ---
 
 spring:
-  profiles: dev
   datasource:
     url: jdbc:h2:tcp://localhost/~/jpa-manager; #서버모드
   jpa:
     hibernate:
       ddl-auto: none
+  config:
+    activate:
+      on-profile: dev

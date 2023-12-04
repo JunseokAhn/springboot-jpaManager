@@ -38,6 +38,7 @@ public class EmMemberRepository extends EmRepository<Member> {
                         " join fetch m.team t",
                 Member.class).getResultList();
     }
+
     @Override
     public List<Member> findWithPaging(int start, int end) {
         return em.createQuery(
@@ -48,4 +49,13 @@ public class EmMemberRepository extends EmRepository<Member> {
                 .getResultList();
     }
 
+    public List<Member> findByTeamId(long teamId) {
+        return em.createQuery(
+                        "select distinct m " +
+                                "from Member m " +
+                                "where m.team.id =:teamId",
+                        Member.class)
+                .setParameter("teamId", teamId)
+                .getResultList();
+    }
 }

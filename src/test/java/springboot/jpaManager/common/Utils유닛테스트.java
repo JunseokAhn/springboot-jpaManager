@@ -1,8 +1,7 @@
 package springboot.jpaManager.common;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import springboot.jpaManager.domain.Company;
 import springboot.jpaManager.domain.Member;
@@ -11,6 +10,7 @@ import springboot.jpaManager.dto.CompanyDTO;
 import springboot.jpaManager.dto.MemberDTO;
 import springboot.jpaManager.dto.TeamDTO;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -90,7 +90,7 @@ public class Utils유닛테스트 {
         Assertions.assertThatThrownBy(() -> utils.isNotReflected(companyDTO2.getId())).isInstanceOf(RuntimeException.class);
     }
 
-    @Before
+    @PostConstruct
     public void init(){
         // private생성자 매핑 허용
         mapper.getConfiguration()

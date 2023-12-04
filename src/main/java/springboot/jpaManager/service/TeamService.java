@@ -34,7 +34,10 @@ public class TeamService {
     @Transactional
     public void updateTeam(TeamDTO.Update teamDTO) {
         Team origin = findOne(teamDTO.getId());
-        Company company = companyService.findOne(teamDTO.getCompanyId());
+        Company company = null;
+        if(teamDTO.getCompanyId() != null){
+            company = companyService.findOne(teamDTO.getCompanyId());
+        }
 
         origin.update(teamDTO, company);
     }
