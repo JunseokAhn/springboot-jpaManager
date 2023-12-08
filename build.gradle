@@ -1,12 +1,14 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.18'
+    id 'org.springframework.boot' version '2.7.17'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'springboot'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+java.sourceCompatibility = '11'
 
 configurations {
     developmentOnly
@@ -37,8 +39,36 @@ dependencies {
 //    implementation group: 'net.jodah', name: 'typeto ols', version: '0.6.3'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
 
+    // querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:5.0.0"
+    implementation "com.querydsl:querydsl-apt:5.0.0"
+
 }
 
-test {
+// Qtype 생성 경로
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+tasks.named('test') {
+    outputs.dir snippetsDir
     useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    dependsOn test
 }

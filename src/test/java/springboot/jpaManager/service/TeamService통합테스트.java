@@ -24,6 +24,9 @@ public class TeamService통합테스트 {
     @Autowired
     private MemberService memberService;
 
+
+
+
     @Test
     public void updateTeam_success() {
 
@@ -73,7 +76,9 @@ public class TeamService통합테스트 {
         //given
         long teamId = 1L;
         long memberId= 4L;
-        assertNotEquals( "memberId 4L은 teamId 1L의 멤버가 아니다",teamId, memberService.findOne(memberId).getTeam().getId());
+        Member member1 = memberService.findOne(memberId);
+        Long id = member1.getTeam().getId();
+        assertNotEquals( "memberId 4L은 teamId 1L의 멤버가 아니다",teamId, id);
 
         //when
         teamService.addMember(teamId, memberId);

@@ -3,9 +3,9 @@ INSERT INTO COMPANY (SELECT '1', '도시1', '거리1', '우편번호1', '회사1
 
 INSERT INTO TEAM (SELECT '1', '팀1', '업무1', '1'
                   UNION ALL
-                  SELECT '2', '팀1', '업무1', '1'
+                  SELECT '2', '팀2', '업무1', '1'
                   UNION ALL
-                  SELECT '3', '팀1', '업무1', '1');
+                  SELECT '3', '팀3', '업무1', '1');
 
 INSERT INTO MEMBER (SELECT 'Member', '1', '도시1', '거리1', '우편번호1', '유저1-1', '신입', '3000000', 'WORK', NULL, '1'
                     UNION ALL
