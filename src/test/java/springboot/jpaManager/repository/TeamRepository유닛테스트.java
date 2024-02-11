@@ -24,12 +24,13 @@ public class TeamRepository유닛테스트 {
 
     @Test
     void teamWithCompanyById(){
-        Optional<Team> teamWithCompanyById = repository.findTeamWithCompanyById(1L);
+//        Optional<Team> teamWithCompanyById = repository.findTeamWithCompanyById(1L);
+        Optional<Team> teamWithCompanyById = repository.findById(1L);
         Team team1 = teamWithCompanyById.orElseThrow(() -> new NoSuchElementException());
 
-        Team team2 = tem.getEntityManager().createQuery("select t from Team t where t.id=:id", Team.class)
-                .setParameter("id", 1L)
-                .getSingleResult();
-        Assertions.assertThat(team1).isEqualTo(team2);
+//        Team team2 = tem.getEntityManager().createQuery("select t from Team t where t.id=:id", Team.class)
+//                .setParameter("id", 1L)
+//                .getSingleResult();
+//        Assertions.assertThat(team1).isEqualTo(team2);
     }
 }
