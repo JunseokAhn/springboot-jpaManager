@@ -43,10 +43,13 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:5.0.0"
     implementation "com.querydsl:querydsl-apt:5.0.0"
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
 }
 
 // Qtype 생성 경로
 def querydslDir = "$buildDir/generated/querydsl"
+def snippetsDir = "$buildDir/generated/snippetsDir"
 querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
